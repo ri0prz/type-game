@@ -1,0 +1,32 @@
+* {
+   font-family: 'Onest', sans-serif;
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+.bg-body-secondary {
+   animation: fade 1s infinite ease-in-out;
+}
+.text-warning {
+   animation: fade2 5s infinite ease-in-out;
+}
+.scale {
+   animation: scale 2s infinite ease-in-out;
+}
+
+@keyframes fade {
+   50% {
+      opacity: 0.5;
+   }
+}
+@keyframes fade2 {
+   50% {
+      opacity: 0;
+   }
+}
+@keyframes scale {
+   50% {
+      scale: 0.9;
+   }
+}
