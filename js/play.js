@@ -1,5 +1,4 @@
 import { words } from "./word.js";
-import { resetLocalValue } from "./localDb.js";
 
 // Input Initialization
 const typer = document.getElementById("typer");
@@ -34,11 +33,10 @@ let maxWord = elements.length;
 // Repeater
 let localRepeat = localStorage.getItem("repetition");
 if (localRepeat === null || "NaN") localStorage.setItem("repetition", 1);
-localRepeat = localStorage.getItem("repetition");
 
 let localSentenceAverage = localStorage.getItem("sentenceAverage");
 if (localSentenceAverage === null || "NaN") localStorage.setItem("sentenceAverage", 0);
-localSentenceAverage = localStorage.getItem("sentenceAverage");
+localSentenceAverage = parseFloat(localStorage.getItem("sentenceAverage")).toFixed(2);
 
 // Showcase Indicator
 const repetitonTag = document.getElementById("repetition-tag");
@@ -100,7 +98,7 @@ typer.oninput = (e) => {
       }
 
       // Make some code for stats showcase here
-      averageTag.textContent = `${totalAverage}%`;
+      averageTag.textContent = `${totalAverage.toFixed(2)}%`;
       const resultBox = document.getElementById('result-bar');
       resultBox.classList.add('active');
       isDone = true;
