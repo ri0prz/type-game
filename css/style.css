@@ -1,23 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@400;700;900&family=Poppins:wght@100;400;700&display=swap');
+
 * {
    font-family: 'Onest', sans-serif;
    margin: 0;
    padding: 0;
-   box-sizing: border-box;   
+   box-sizing: border-box;
 }
 
 .default {
    margin: 0;
    padding: 0;
 }
+
+.f-poppins {
+   font-family: 'Poppins', sans-serif;
+}
+
 .bg-body-secondary {
    animation: fade 1s infinite ease-in-out;
 }
+
 .text-warning {
    animation: fade2 5s infinite ease-in-out;
 }
+
 .scale {
    animation: scale 2s infinite ease-in-out;
 }
+
 .fade-effect {
    opacity: 0;
    animation: fade 2s infinite ease-in-out 5s;
@@ -28,11 +38,13 @@
       opacity: 0.5;
    }
 }
+
 @keyframes fade2 {
    50% {
       opacity: 0;
    }
 }
+
 @keyframes scale {
    50% {
       scale: 0.9;

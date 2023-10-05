@@ -35,8 +35,8 @@ let localRepeat = localStorage.getItem("repetition");
 if (localRepeat === null || "NaN") localStorage.setItem("repetition", 1);
 
 let localSentenceAverage = localStorage.getItem("sentenceAverage");
+console.log('now:', localSentenceAverage)
 if (localSentenceAverage === null || "NaN") localStorage.setItem("sentenceAverage", 0);
-localSentenceAverage = parseFloat(localStorage.getItem("sentenceAverage")).toFixed(2);
 
 // Showcase Indicator
 const repetitonTag = document.getElementById("repetition-tag");
@@ -78,15 +78,16 @@ typer.oninput = (e) => {
       "p-2"
    );
 
+   console.log('then:', localSentenceAverage)
+
    // Prevent Sentence Input Limit
    if (typeIndex >= maxWord - 1) {
       isFulfilled = true;
       const currentLength = parseInt(localSentenceAverage);
       const average = Math.round((trueWord / maxWord) * 100);      
-      const totalAverage = parseFloat((currentLength + average) / parseInt(localRepeat));
+      const totalAverage = parseFloat((currentLength + average) / parseInt(localRepeat));      
       localStorage.setItem("sentenceAverage", totalAverage);
 
-      // repetitonTag.textContent = parseInt(localStorage.getItem("repetition"));
       console.log(average, currentLength, average, parseInt(localRepeat), totalAverage);
 
       // Confirmation
@@ -106,6 +107,8 @@ typer.oninput = (e) => {
    }
 
    // Auto Sensor
+   if (isDone) return;
+
    typeIndex++;
    splitedLetter[typeIndex].classList.add(
       "bg-body-secondary",
