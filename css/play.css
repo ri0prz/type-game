@@ -1,0 +1,34 @@
+#result-bar {
+   display: grid;
+   grid-template-rows: 0fr;
+   overflow: hidden;
+   opacity: 0;
+   transition: 2s;
+}
+
+#result-bar.active {
+   grid-template-rows: 1fr;
+   opacity: 1;
+   transition: 2s;      
+}
+
+.expandable {
+   min-height: 0;
+}
+
+.saturation-effect {
+   cursor: pointer;
+   animation: light 2s infinite;
+   transition: 1s;
+}
+
+.saturation-effect:hover {
+   transition: 1s;
+   scale: 1.1;
+}
+
+@keyframes light {
+   50% {
+      filter: saturate(200%);
+   }
+}

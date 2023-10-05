@@ -1,4 +1,5 @@
 import { words } from "./word.js";
+import { resetLocalValue } from "./localDb.js";
 
 // Input Initialization
 const typer = document.getElementById("typer");
@@ -6,7 +7,9 @@ const typer = document.getElementById("typer");
 // Sentence Setter
 const sentencePart = Math.abs(Math.round(Math.random() * words.length - 1));
 const sentenceMain = words[sentencePart];
-const sentenceIndex = Math.abs(Math.round(Math.random() * sentenceMain.setter.length - 1));
+const sentenceIndex = Math.abs(
+   Math.round(Math.random() * sentenceMain.setter.length - 1)
+);
 
 // Set the new sentence + feature
 const word = sentenceMain.setter[sentenceIndex];
@@ -28,14 +31,32 @@ const splitedLetter = document.getElementsByClassName("system");
 let typeIndex = 0;
 let maxWord = elements.length;
 
+// Repeater
+let localRepeat = localStorage.getItem("repetition");
+if (localRepeat === null || "NaN") localStorage.setItem("repetition", 1);
+localRepeat = localStorage.getItem("repetition");
+
+let localSentenceAverage = localStorage.getItem("sentenceAverage");
+if (localSentenceAverage === null || "NaN") localStorage.setItem("sentenceAverage", 0);
+localSentenceAverage = localStorage.getItem("sentenceAverage");
+
+// Showcase Indicator
+const repetitonTag = document.getElementById("repetition-tag");
+repetitonTag.textContent = parseInt(localRepeat);
+
+// Get the current value of 'repetition' from localStorage
+const averageTag = document.getElementById('average-tag');
+averageTag.textContent = `${parseFloat(localSentenceAverage).toFixed(2)}%`;
+
 // Sensor
 splitedLetter[typeIndex].classList.add("bg-body-secondary", "rounded", "p-2");
 
 // Typing System
 let isStarted = true;
 let isFulfilled = false;
+let isDone = false;
+let trueWord = 0;
 typer.oninput = (e) => {
-
    // Start the time after do type
    if (isStarted) {
       updateTime();
@@ -48,8 +69,10 @@ typer.oninput = (e) => {
    typer.value = "";
 
    // Check
-   if (letter == currentLetter) splitedLetter[typeIndex].classList.add("text-success");
-   else splitedLetter[typeIndex].classList.add("text-warning");
+   if (letter == currentLetter) {
+      splitedLetter[typeIndex].classList.add("text-success");
+      trueWord++;
+   } else splitedLetter[typeIndex].classList.add("text-warning");
 
    splitedLetter[typeIndex].classList.remove(
       "bg-body-secondary",
@@ -60,15 +83,27 @@ typer.oninput = (e) => {
    // Prevent Sentence Input Limit
    if (typeIndex >= maxWord - 1) {
       isFulfilled = true;
+      const currentLength = parseInt(localSentenceAverage);
+      const average = Math.round((trueWord / maxWord) * 100);      
+      const totalAverage = parseFloat((currentLength + average) / parseInt(localRepeat));
+      localStorage.setItem("sentenceAverage", totalAverage);
+
+      // repetitonTag.textContent = parseInt(localStorage.getItem("repetition"));
+      console.log(average, currentLength, average, parseInt(localRepeat), totalAverage);
 
       // Confirmation
       const bool = confirm("All is set, do another round?");
       if (bool) {
+         const currentRepeat = parseInt(localRepeat);
+         localStorage.setItem("repetition", currentRepeat + 1);
          location.reload();
       }
 
       // Make some code for stats showcase here
-      seeMyResult();
+      averageTag.textContent = `${totalAverage}%`;
+      const resultBox = document.getElementById('result-bar');
+      resultBox.classList.add('active');
+      isDone = true;
       return;
    }
 
@@ -87,6 +122,11 @@ window.onmousemove = () => {
 };
 window.onclick = () => {
    typer.focus();
+
+   // Leave the game when ended
+   if (isDone) {      
+      window.location.href = '/';
+   }
 };
 
 // Timer

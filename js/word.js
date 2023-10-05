@@ -3,7 +3,7 @@ export const words = [
       type: "Classic",
       cretaor: "Group Z",
       score: 10,
-      duration: 18,
+      duration: 30,
       setter: [
          "A giant fungus inside of my belly",
          "Better wash our hands before take something",
@@ -14,7 +14,7 @@ export const words = [
       type: "Custom",
       cretaor: "Rio",
       score: 7,
-      duration: 10,
+      duration: 24,
       setter: [
          "I know that you actually read this sentence fluently",
          "This kind of game somehow amuse you whom playing it",
