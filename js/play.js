@@ -95,14 +95,14 @@ typer.oninput = (e) => {
          const currentRepeat = parseInt(localRepeat);
          localStorage.setItem("repetition", currentRepeat + 1);
          location.reload();
+         return;
       }
 
       // Make some code for stats showcase here
       averageTag.textContent = `${totalAverage.toFixed(2)}%`;
       const resultBox = document.getElementById('result-bar');
       resultBox.classList.add('active');
-      isDone = true;
-      return;
+      isDone = true;      
    }
 
    // Auto Sensor
