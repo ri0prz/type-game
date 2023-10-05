@@ -125,7 +125,7 @@ window.onclick = () => {
 
    // Leave the game when ended
    if (isDone) {      
-      window.location.href = '/';
+      window.location.href = './';
    }
 };
 
