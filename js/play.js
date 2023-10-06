@@ -76,9 +76,7 @@ typer.oninput = (e) => {
       "bg-body-secondary",
       "rounded",
       "p-2"
-   );
-
-   console.log('then:', localSentenceAverage)
+   );   
 
    // Prevent Sentence Input Limit
    if (typeIndex >= maxWord - 1) {

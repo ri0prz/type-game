@@ -21,4 +21,15 @@ export const words = [
          "Type type tpye beware it has typo at some wardsz"
       ]
    },
+   {
+      type: "Custom",
+      cretaor: "Fariz",
+      score: 7,
+      duration: 24,
+      setter: [
+         "A Better person can you this it has words",
+         "A kind of bluetooth actually playing",
+         "Somehow you can read this sent type"
+      ]
+   },
 ]
