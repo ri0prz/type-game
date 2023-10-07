@@ -50,3 +50,80 @@
       scale: 0.9;
    }
 }
+
+/* Header */
+a {
+   text-decoration: none;
+   color: black;
+}
+
+header {
+   height: 5rem;   
+   z-index: 1;
+}
+
+header a.active {
+   background-color: orangered;
+   color: white;
+   padding: 4px 16px;
+   border-radius: 10px;
+   transition: .5s;
+}
+
+header a.active:hover {
+   background-color: blue;
+   transition: .5s;
+}
+
+header a:not(.active) {
+   transition: .5s;
+}
+
+header a:not(.active):hover {
+   color: orangered;
+   letter-spacing: 0.4px;
+   transition: .5s;
+}
+
+.mobile-effect {
+   cursor: pointer;   
+   display: none;
+}
+
+/* Mobile Portrait */
+@media (max-width: 767px) {
+   nav {
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+   }
+
+   .mobile-effect {
+      display: inline-block;
+      background-image: url("../images/png/icon-bar.png");
+      background-size: contain;
+      aspect-ratio: 1/1;
+   }
+   .mobile-effect.active {
+      background-image: url("../images/png/icon-bar-close.png");
+   }
+
+   .right {
+      position: absolute;   
+      z-index: -1;   
+      top: 0; left: 0;
+      width: 100%;
+      height: inherit;
+      background-color: rgba(255, 255, 255, 0.6);  
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);    
+      backdrop-filter: blur(40px);
+      opacity: 0;
+      transition: .7s;      
+   }
+   .right a::selection {
+      background-color: transparent;
+   }
+   .right.active {
+      opacity: 1;
+      transform: translateY(100%);
+      transition: .7s;    
+   }
+}
