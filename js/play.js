@@ -141,8 +141,8 @@ const updateTime = () => {
    timer.classList.add("scale");
 
    if (duration < 0) {
-      alert("Time is out!");
-      location.reload();
+      alert("Time is out, disqualified.");
+      window.location.href = './';
       return;
    }
    timer.textContent = `${duration}s`;
