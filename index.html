@@ -4,6 +4,8 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+   <link rel="shortcut icon" href="images/png/icon-logo.png" type="image/x-icon">
    <title>Type Game</title>
 
    <!-- Bootstrap + CSS -->
@@ -36,7 +38,7 @@
    <div id="profile"
       class="container d-flex justify-content-center align-items-center flex-column index-height-restore">
       <div class="position-relative">
-         <img class="rounded-circle" src="images/jpg/player-icon-4.jpg" alt="char"
+         <img id="player-character" class="rounded-circle" src="images/jpg/player-icon-4.jpg" alt="char"
             style="width: 200px; aspect-ratio: 1/1;">
          <div class="position-absolute rounded-circle shadow p-2 bg-white" style="top: 0; right: 0; cursor: pointer;">
             <img src="images/png/icon-change.png" alt="char-change" style="width: 2rem;" id="liveToastBtn">
@@ -55,7 +57,7 @@
             <small>🎨</small>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
          </div>
-         <div class="toast-body d-flex justify-content-center align-items-start flex-wrap" style="gap: 8px;">
+         <div id="character-list" class="toast-body d-flex justify-content-center align-items-start flex-wrap" style="gap: 8px;">
             <img src="images/jpg/player-icon-1.jpg" alt="avatar" class="w-25 rounded" style="cursor: pointer;">
             <img src="images/jpg/player-icon-2.jpg" alt="avatar" class="w-25 rounded" style="cursor: pointer;">
             <img src="images/jpg/player-icon-3.jpg" alt="avatar" class="w-25 rounded" style="cursor: pointer;">

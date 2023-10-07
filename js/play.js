@@ -35,15 +35,16 @@ let localRepeat = localStorage.getItem("repetition");
 if (localRepeat === null || "NaN") localStorage.setItem("repetition", 1);
 
 let localSentenceAverage = localStorage.getItem("sentenceAverage");
-console.log('now:', localSentenceAverage)
-if (localSentenceAverage === null || "NaN") localStorage.setItem("sentenceAverage", 0);
+console.log("now:", localSentenceAverage);
+if (localSentenceAverage === null || "NaN")
+   localStorage.setItem("sentenceAverage", 0);
 
 // Showcase Indicator
 const repetitonTag = document.getElementById("repetition-tag");
 repetitonTag.textContent = parseInt(localRepeat);
 
 // Get the current value of 'repetition' from localStorage
-const averageTag = document.getElementById('average-tag');
+const averageTag = document.getElementById("average-tag");
 averageTag.textContent = `${parseFloat(localSentenceAverage).toFixed(2)}%`;
 
 // Sensor
@@ -76,17 +77,28 @@ typer.oninput = (e) => {
       "bg-body-secondary",
       "rounded",
       "p-2"
-   );   
+   );
 
    // Prevent Sentence Input Limit
    if (typeIndex >= maxWord - 1) {
       isFulfilled = true;
       const currentLength = parseInt(localSentenceAverage);
-      const average = Math.round((trueWord / maxWord) * 100);      
-      const totalAverage = parseFloat((currentLength + average) / parseInt(localRepeat));      
+      const average = Math.round((trueWord / maxWord) * 100);
+      const totalAverage = parseFloat(
+         (currentLength + average) / parseInt(localRepeat)
+      );
       localStorage.setItem("sentenceAverage", totalAverage);
 
-      console.log(average, currentLength, average, parseInt(localRepeat), totalAverage);
+      console.log(
+         average,
+         currentLength,
+         average,
+         parseInt(localRepeat),
+         totalAverage
+      );
+
+      // Auto Sensor
+      if (isDone) return;
 
       // Confirmation
       const bool = confirm("All is set, do another round?");
@@ -99,13 +111,10 @@ typer.oninput = (e) => {
 
       // Make some code for stats showcase here
       averageTag.textContent = `${totalAverage.toFixed(2)}%`;
-      const resultBox = document.getElementById('result-bar');
-      resultBox.classList.add('active');
-      isDone = true;      
+      const resultBox = document.getElementById("result-bar");
+      resultBox.classList.add("active");
+      isDone = true;
    }
-
-   // Auto Sensor
-   if (isDone) return;
 
    typeIndex++;
    splitedLetter[typeIndex].classList.add(
@@ -123,8 +132,8 @@ window.onclick = () => {
    typer.focus();
 
    // Leave the game when ended
-   if (isDone) {      
-      window.location.href = './';
+   if (isDone) {
+      window.location.href = "./";
    }
 };
 
@@ -142,7 +151,7 @@ const updateTime = () => {
 
    if (duration < 0) {
       alert("Time is out, disqualified.");
-      window.location.href = './';
+      window.location.href = "./";
       return;
    }
    timer.textContent = `${duration}s`;
@@ -150,3 +159,7 @@ const updateTime = () => {
 
    setTimeout(updateTime, 1000);
 };
+
+window.onkeydown = (e) => {
+   if (e.key == 'Tab') alert('Tab key is not allowed. 😣');
+}
