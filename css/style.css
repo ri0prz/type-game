@@ -142,7 +142,7 @@ footer {
 
 @media (max-height: 700px) {
    .height-restore {
-      height: 40rem;
+      height: 40rem;      
    }
    footer {
       position: relative;

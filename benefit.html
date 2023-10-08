@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,8 +15,24 @@
    <link rel="stylesheet" href="css/index.css">
 
    <!-- Scripts -->
-   <script type="module" src="js/template.js" defer></script>   
+   <script type="module" src="js/template.js" defer></script>
+
+   <!-- Card Style -->
+   <style>
+      .benefit-card {
+         width: 22rem;                      
+         padding: 0;
+         margin: 0;
+         overflow: hidden;
+      }
+      .benefit-card > div > img {
+         height: 20rem;
+         object-fit: cover;
+         box-shadow: 0 0 20px rgba(0, 0, 0, 0.04);
+      }
+   </style>
 </head>
+
 <body>
    <header
       class="fluid-container d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 bg-white">
@@ -32,5 +49,40 @@
          </div>
       </nav>
    </header>
+   <div class="container  d-flex justify-content-end align-items-center flex-column text-center" style="height: 16rem;">
+      <h1 class="fw-bold" style="font-size: 2rem;">t<span class="text-success">y</span>pe!</h1>
+      <p class="text-secondary">Game Benefits</p>
+   </div>
+
+   <div class="container d-flex justify-content-center align-items-start height-restore flex-wrap text-center w-75">
+      <div class="container benefit-card">
+         <div class="card mb-3">
+            <img src="images/jpg/image-typing-improve.jpg" class="card-img-top" alt="image">
+            <div class="card-body">
+               <h5 class="card-title text-secondary">Pace Improvement</h5>
+               <p class="card-text px-2">This game is designed to improve players type skill faster.</p>
+            </div>
+         </div>
+      </div>
+      <div class="container benefit-card">
+         <div class="card mb-3">
+            <img src="images/jpg/image-typing-accuracy.jpg" class="card-img-top" alt="image">
+            <div class="card-body">
+               <h5 class="card-title text-secondary">Accuracy</h5>
+               <p class="card-text">This game help users develop accurate typing habits.</p>
+            </div>
+         </div>
+      </div>      
+      <div class="container benefit-card">
+         <div class="card mb-3">
+            <img src="images/jpg/image-confidence.jpg" class="card-img-top" alt="image">
+            <div class="card-body">
+               <h5 class="card-title text-secondary">Confidence</h5>
+               <p class="card-text">Users could gain confidence with ability, which affect impact on self-esteem.</p>
+            </div>
+         </div>
+      </div>      
+   </div>
 </body>
+
 </html>
