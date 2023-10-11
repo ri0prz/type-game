@@ -135,17 +135,12 @@ header a:not(.active):hover {
 }
 
 footer {
-   position: absolute;
-   bottom: 0; left: 0;
+   position: relative;      
    width: 100%;
 }
 
 @media (max-height: 700px) {
    .height-restore {
       height: 40rem;      
-   }
-   footer {
-      position: relative;
-      inset: 0;
    }
 }
