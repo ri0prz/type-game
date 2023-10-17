@@ -23,7 +23,7 @@ function registrasi($tambah){
     $password2 = $tambah['password2'];
 
     // cek apakah username sudah pernah ada atau belum 
-    $result = mysqli_query($db, "SELECT username FROM users WHERE username = '$username'");
+    $result = mysqli_query($db, "SELECT username FROM user WHERE username = '$username'");
 
     if(mysqli_fetch_assoc($result)){
         echo "<script>
