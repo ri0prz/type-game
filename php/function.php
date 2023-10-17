@@ -43,7 +43,7 @@ function registrasi($tambah){
     // enksripsi password
     $password = password_hash($password, PASSWORD_DEFAULT); //pakai parameter password_default aja
     // tambahkan username ke database
-    $query = "INSERT INTO users VALUES (
+    $query = "INSERT INTO user VALUES (
     '',
     '$username',
     '$password'

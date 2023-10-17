@@ -2,7 +2,7 @@
 require 'function.php';
 
 // cek apakah button sudah di klik atau belum
-if (isset($_POST['login'])){
+if (isset($_POST['submit'])){
     $username = $_POST['username'];
     $password = $_POST['password'];
 
@@ -14,7 +14,7 @@ if(mysqli_num_rows($result) === 1){
     // cek password
     $row = mysqli_fetch_assoc($result);
     if (password_verify($password, $row['password'])) {
-        header("Location: index.html");
+        header("Location: ../index.html");
         exit;
     }
 }
