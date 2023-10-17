@@ -41,4 +41,4 @@ if(isset($_POST['submit'])){
         <p class="text">sudah punya akun?Login <a href="login.php">Disini</a>.</p>
     </div>
 </body>
-</html>
+</html> 
