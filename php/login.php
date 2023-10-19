@@ -1,5 +1,13 @@
 <?php
+session_start();
 require 'function.php';
+
+
+//cek apakah sudah login atau belum,kalau sudah akan dikembalikan ke home
+if(isset($_SESSION['login'])){
+    header('location: ../index.html');
+    exit;
+}
 
 // cek apakah button sudah di klik atau belum
 if (isset($_POST['submit'])){
@@ -8,12 +16,18 @@ if (isset($_POST['submit'])){
 
     $result = mysqli_query($db, "SELECT * FROM user WHERE username = '$username'");
 
+  
+
 // cek username
 if(mysqli_num_rows($result) === 1){
 
     // cek password
     $row = mysqli_fetch_assoc($result);
     if (password_verify($password, $row['password'])) {
+        
+        // session
+        $_SESSION['login'] = true;
+        
         header("Location: ../index.html");
         exit;
     }
