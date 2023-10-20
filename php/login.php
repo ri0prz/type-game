@@ -1,22 +1,35 @@
 <?php
+session_start();
 require 'function.php';
 
-// Cek button sudah di klik atau belum
+
+//cek apakah sudah login atau belum,kalau sudah akan dikembalikan ke home
+if (isset($_SESSION['login'])) {
+    header('location: ../index.html');
+    exit;
+}
+
+// cek apakah button sudah di klik atau belum
 if (isset($_POST['submit'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
     $result = mysqli_query($db, "SELECT * FROM user WHERE username = '$username'");
 
-    // Cek username
-    if (mysqli_num_rows($result) === 1) {
+}
 
-        // Cek password
-        $row = mysqli_fetch_assoc($result);
-        if (password_verify($password, $row['password'])) {
-            header("Location: ../");
-            exit;
-        }
+// cek username
+if (mysqli_num_rows($result) === 1) {
+
+    // cek password
+    $row = mysqli_fetch_assoc($result);
+    if (password_verify($password, $row['password'])) {
+
+        // session
+        $_SESSION['login'] = true;
+
+        header("Location: ../index.html");
+        exit;
     }
     $error = true;
 }
@@ -60,7 +73,7 @@ if (isset($_POST['submit'])) {
 <body class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
     <div class="toast-container position-fixed bottom-0 end-0 p-4">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-danger-subtle">                
+            <div class="toast-header bg-danger-subtle">
                 <strong class="me-auto">Error occured.</strong>
                 <small>recently</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
