@@ -19,13 +19,19 @@ function query($query)
 function registrasi($tambah)
 {
     global $db;
-
     $username = strtolower(stripslashes($tambah['username'])); // ✨ stripslashes membersihkan dari karakter2 aneh
     $password = $tambah['password'];
     $password2 = $tambah['password2'];
 
     // Cek username ada belum 
     $result = mysqli_query($db, "SELECT username FROM user WHERE username = '$username'");
+    
+    if (mysqli_fetch_assoc($result) == "") {
+        echo "<script>
+        alert('boom')
+        </script>";
+        return false;
+    }
 
     if (mysqli_fetch_assoc($result)) {
         echo "<script>

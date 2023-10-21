@@ -3,7 +3,7 @@ session_start();
 require 'function.php';
 
 
-//cek apakah sudah login atau belum,kalau sudah akan dikembalikan ke home
+// cek apakah sudah login atau belum,kalau sudah akan dikembalikan ke home
 if (isset($_SESSION['login'])) {
     header('location: ../index.html');
     exit;
