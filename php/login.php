@@ -2,14 +2,7 @@
 session_start();
 require 'function.php';
 
-
-// cek apakah sudah login atau belum,kalau sudah akan dikembalikan ke home
-if (isset($_SESSION['login'])) {
-    header('location: ../index.html');
-    exit;
-}
-
-// cek apakah button sudah di klik atau belum
+// Cek apakah button sudah di klik atau belum
 if (isset($_POST['submit'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -17,7 +10,7 @@ if (isset($_POST['submit'])) {
     $result = mysqli_query($db, "SELECT * FROM user WHERE username = '$username'");
 
 
-    // cek username
+    // Cek username
     if (mysqli_num_rows($result) === 1) {
 
         // cek password
@@ -27,11 +20,23 @@ if (isset($_POST['submit'])) {
             // session
             $_SESSION['login'] = true;
 
-            header("Location: ../index.html");
+            header("Location: ../");
             exit;
         }
     }
     $error = true;
+}
+
+// Cek apakah sudah login atau belum, kalau sudah akan dikembalikan ke home
+if (isset($_SESSION['login'])) {
+
+    // Back-end local
+    $local_user = $GET['username'];
+
+    // Redirect
+    $_SESSION['username'] = $local_user;
+    header('Location: ../');
+    exit;
 }
 ?>
 

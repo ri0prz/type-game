@@ -70,13 +70,13 @@ if (isset($_POST['submit'])) {
         <h1 class="fw-bold mb-4" style="font-size: 2rem;">t<span class="text-success">y</span>pe!</h1>
         <form action="" method="post" class="d-flex flex-column justify-content-center align-items-center">
             <label for="username">Username.</label>
-            <input type="text" name="username" id="username" autocomplete="off"><br>
+            <input type="text" name="username" id="username" autocomplete="off" required><br>
 
             <label for="password">Password.</label>
-            <input type="password" name="password" id="password" autocomplete="off"><br>
+            <input type="password" name="password" id="password" autocomplete="off" required><br>
 
             <label for="password">Re-type Password.</label>
-            <input type="password" name="password2" id="password2" autocomplete="off">
+            <input type="password" name="password2" id="password2" autocomplete="off" required>
 
             <button class="btn btn-success w-100 py-2" name="submit" type="submit">Register</button>
         </form>
