@@ -2,16 +2,15 @@
 require "function.php";
 
 // cek apakah button di klik atau tidak 
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit'])) {    
     if (registrasi($_POST) > 0) {
         echo "<script>
-        alert('berhasil')
-        document.location.href = 'login.php';
+        alert('Account created!');
+        document.location.href = './login.php';
         </script>";
     } else {
         echo "<script>
-        alert('gagal')
-        document.location.href = 'register.php';
+        alert('Failed to add an account.');        
         </script>";
     }
 }
@@ -55,7 +54,7 @@ if (isset($_POST['submit'])) {
 <body class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
     <div class="toast-container position-fixed bottom-0 end-0 p-4">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-danger-subtle">                
+            <div class="toast-header bg-danger-subtle">
                 <strong class="me-auto">Error occured.</strong>
                 <small>recently</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>

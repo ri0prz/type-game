@@ -13,30 +13,20 @@ if (isset($_POST['submit'])) {
     // Cek username
     if (mysqli_num_rows($result) === 1) {
 
-        // cek password
+        // Cek password
         $row = mysqli_fetch_assoc($result);
-        if (password_verify($password, $row['password'])) {
+        if (readQuery("SELECT * FROM user WHERE password = '$password'")) {
 
-            // session
+            // Session
             $_SESSION['login'] = true;
+            $_SESSION['username'] = $username;
 
-            header("Location: ../");
-            exit;
+            // Redirect
+            header('Location: ../');
+            exit();
         }
     }
     $error = true;
-}
-
-// Cek apakah sudah login atau belum, kalau sudah akan dikembalikan ke home
-if (isset($_SESSION['login'])) {
-
-    // Back-end local
-    $local_user = $GET['username'];
-
-    // Redirect
-    $_SESSION['username'] = $local_user;
-    header('Location: ../');
-    exit;
 }
 ?>
 

@@ -1,8 +1,16 @@
-<?php  
-  // Determine user auth state
-  $login_state = false;
-  session_start();
-  if ($_SESSION['login']) $login_state = true;  
+<?php
+
+// Determine user auth state
+$login_state = false;
+session_start();
+if (isset($_SESSION['login']))
+  $login_state = true;
+
+$name = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
+echo "<script>
+  alert('Hello, $name');  
+  </script>";
+
 ?>
 
 <!DOCTYPE html>
