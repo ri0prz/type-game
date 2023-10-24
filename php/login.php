@@ -2,15 +2,11 @@
 session_start();
 require 'function.php';
 
-
-//cek apakah sudah login atau belum,kalau sudah akan dikembalikan ke homegit re
-if(isset($_SESSION['login'])){
-    header('location: ../index.html');
-    exit;
-}
-
 // cek apakah button sudah di klik atau belum
 if (isset($_POST['submit'])){
+=======
+// Cek apakah button sudah di klik atau belum
+if (isset($_POST['submit'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
@@ -18,16 +14,21 @@ if (isset($_POST['submit'])){
 
 // cek username
 if(mysqli_num_rows($result) === 1){
+    // Cek username
+    if (mysqli_num_rows($result) === 1) {
 
-    // cek password
-    $row = mysqli_fetch_assoc($result);
-    if (password_verify($password, $row['password'])) {
-        
-        // session
-        $_SESSION['login'] = true;
-        
-        header("Location: ../index.html");
-        exit;
+        // Cek password
+        $row = mysqli_fetch_assoc($result);
+        if (readQuery("SELECT * FROM user WHERE password = '$password'")) {
+
+            // Session
+            $_SESSION['login'] = true;
+            $_SESSION['username'] = $username;
+
+            // Redirect
+            header('Location: ../');
+            exit();
+        }
     }
 }
 $error = true;

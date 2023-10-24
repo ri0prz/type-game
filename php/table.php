@@ -26,13 +26,13 @@ $i = 1;
         <?php foreach ($pelanggan as $row): ?>
             <tr>
                 <td>
-                    <?php echo $row['id']; ?>
+                    <?php echo $row['user_id']; ?>
                 </td>
                 <td>
                     <?php echo $row['username']; ?>
                 </td>
                 <td>
-                    <?php echo $row['repetion']; ?>
+                    <?php echo $row['repetition']; ?>
                 </td>
             </tr>
             <?php $i++ ?>

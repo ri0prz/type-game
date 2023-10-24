@@ -1,10 +1,10 @@
 <?php
 
 // Koneksi ke database
-$db = mysqli_connect("localhost", "root", "", "TypeGame");
+$db = mysqli_connect("localhost", "root", "", "typegame");
 
 // Baca isi yang ada didatabase
-function query($query)
+function addQuery($query)
 {
     global $db;
     $result = mysqli_query($db, $query);
@@ -15,11 +15,18 @@ function query($query)
     return $rows;
 }
 
+function readQuery($query)
+{
+    global $db;
+    $result = mysqli_query($db, $query);    
+    if ($result) return true;
+    else return false;
+}
+
 // Registrasi
 function registrasi($tambah)
 {
     global $db;
-
     $username = strtolower(stripslashes($tambah['username'])); // ✨ stripslashes membersihkan dari karakter2 aneh
     $password = $tambah['password'];
     $password2 = $tambah['password2'];
@@ -29,7 +36,7 @@ function registrasi($tambah)
 
     if (mysqli_fetch_assoc($result)) {
         echo "<script>
-        alert('username sudah pernah ada')
+        alert('Username already taken.')
         </script>";
         return false;
     }
@@ -37,26 +44,21 @@ function registrasi($tambah)
     // Cek konfirmasi password
     if ($password !== $password2) {
         echo "<script>
-        alert('password salah')
+        alert('Incorrect password.')
         </script>";
         return false;
     }
 
-    // Enkripsi password
-    $password = password_hash($password, PASSWORD_DEFAULT);
-
-    // tambahkan username ke database
-    $query = "INSERT INTO user VALUES (
+    // Tambahkan username ke database
+    $query = "INSERT INTO user (id, username, password, gender_id, server_id) VALUES (
     '',
     '$username',
-    '$password'
+    '$password',
+    1,
+    1
     )";
     mysqli_query($db, $query);
 
     return mysqli_affected_rows($db);
 }
-
-
-
-
 ?>
