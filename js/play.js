@@ -35,9 +35,11 @@ let localRepeat = localStorage.getItem("repetition");
 if (localRepeat === null || "NaN") localStorage.setItem("repetition", 1);
 
 let localSentenceAverage = localStorage.getItem("sentenceAverage");
-console.log("now:", localSentenceAverage);
 if (localSentenceAverage === null || "NaN")
    localStorage.setItem("sentenceAverage", 0);
+
+let localScore = localStorage.getItem("score");
+if (localScore === null || "NaN") localStorage.setItem("score", 0);
 
 // Showcase Indicator
 const repetitonTag = document.getElementById("repetition-tag");
@@ -84,17 +86,19 @@ typer.oninput = (e) => {
       isFulfilled = true;
       const currentLength = parseInt(localSentenceAverage);
       const average = Math.round((trueWord / maxWord) * 100);
-      const totalAverage = parseFloat(
-         (currentLength + average) / parseInt(localRepeat)
-      );
+      const totalAverage = parseFloat((currentLength + average) / parseInt(localRepeat));
+      const totalScore = parseInt(localScore) + trueWord;
+
       localStorage.setItem("sentenceAverage", totalAverage);
+      localStorage.setItem("score", totalScore);
 
       console.log(
          average,
          currentLength,
          average,
          parseInt(localRepeat),
-         totalAverage
+         totalAverage,
+         totalScore
       );
 
       // Auto Sensor
@@ -114,8 +118,14 @@ typer.oninput = (e) => {
       const resultBox = document.getElementById("result-bar");
       resultBox.classList.add("active");
       isDone = true;
+
+      // Cookie for localStorage value transmit through php server
+      document.cookie = `sessionAverage=${totalAverage}`;
+      document.cookie = `score=${localScore}`;
+
    }
 
+   if (isDone) return;
    typeIndex++;
    splitedLetter[typeIndex].classList.add(
       "bg-body-secondary",
@@ -161,5 +171,5 @@ const updateTime = () => {
 };
 
 window.onkeydown = (e) => {
-   if (e.key == 'Tab') alert('Tab key is not allowed. 😣');
-}
+   if (e.key == "Tab") alert("Tab key is not allowed. 😣");
+};

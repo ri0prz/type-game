@@ -6,11 +6,15 @@ session_start();
 if (isset($_SESSION['login']))
   $login_state = true;
 
-$name = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
-echo "<script>
-  alert('Hello, $name');  
-  </script>";
+$isLogin = isset($_SESSION['username']);
+$name = $isLogin ? $_SESSION['username'] : 'Guest';
 
+// Retrieve localData (.js) to server (.php)
+$user_score_average = isset($_COOKIE['sessionAverage']) ? $_COOKIE['sessionAverage'] : 0;
+$user_score_total = isset($_COOKIE["score"]) ? $_COOKIE["score"] : 0;
+// echo "<script>
+//   alert('Hello, $user_score_average');  
+// </script>";
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +36,7 @@ echo "<script>
   <!-- Scripts -->
   <script type="module" src="js/template.js" defer></script>
   <script type="module" src="js/index.js" defer></script>
+
 </head>
 
 <body>
@@ -60,6 +65,7 @@ echo "<script>
       </div>
     </nav>
   </header>
+
   <div id="profile" class="container d-flex justify-content-center align-items-center flex-column height-restore">
     <div class="position-relative">
       <img id="player-character" class="rounded-circle" src="images/jpg/player-icon-4.jpg" alt="char"
@@ -68,8 +74,23 @@ echo "<script>
         <img src="images/png/icon-change.png" alt="char-change" style="width: 2rem" id="liveToastBtn" />
       </div>
     </div>
-    <small class="text-uppercase">Insert Your Name</small>
-    <input type="text" placeholder="Unknown" class="text-center" />
+
+    <?php if (!$isLogin): ?>
+      <small class="text-uppercase">Insert Your Name</small>
+    <?php else: ?>
+      <div class="container d-flex justify-content-around w-25 text-center" style="gap: 20px;">
+        <div class="stats-card">
+          <h1 class="fs-4 text-uppercase">Score</h1>
+          <small><?php echo $user_score_total; ?></small>
+        </div>
+        <div class="stats-card">
+          <h1 class="fs-4 text-uppercase">Rates</h1>
+          <small><?php echo $user_score_average; ?>%</small>
+        </div>
+      </div>
+    <?php endif; ?>
+
+    <input type="text" placeholder="<?php echo $name ?>" class="text-center" style="background: none;" <?php if ($isLogin): ?> disabled <?php endif; ?> />
     <a href="./play.html" class="text-uppercase fs-4">Start</a>
   </div>
 
@@ -91,10 +112,6 @@ echo "<script>
     </div>
   </div>
   <!-- Toast Effect -->
-
-  <footer class="fluid-container d-flex justify-content-center align-items-center" style="height: 5rem">
-    <small class="text-uppercase fw-light text-secondary">© Created by Group 5</small>
-  </footer>
 
   <!-- Bootstrap Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
