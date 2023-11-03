@@ -17,6 +17,7 @@ if (isset($_POST['submit'])) {
 
             // Session
             $_SESSION['login'] = true;
+            $_SESSION['user_id'] = getUser($username, $password)['user_id'];
             $_SESSION['username'] = $username;                                            
 
             // Redirect

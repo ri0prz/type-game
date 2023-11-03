@@ -1,4 +1,5 @@
 <?php
+require 'php/function.php';
 
 // Determine user auth state
 $login_state = false;
@@ -6,15 +7,21 @@ session_start();
 if (isset($_SESSION['login']))
   $login_state = true;
 
-$isLogin = isset($_SESSION['username']);
-$name = $isLogin ? $_SESSION['username'] : 'Guest';
+$is_login = isset($_SESSION['username']);
+$name = $is_login ? $_SESSION['username'] : 'Guest';
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'Undefined';
 
 // Retrieve localData (.js) to server (.php)
-$user_score_average = isset($_COOKIE['sessionAverage']) ? $_COOKIE['sessionAverage'] : 0;
-$user_score_total = isset($_COOKIE["score"]) ? $_COOKIE["score"] : 0;
-// echo "<script>
-//   alert('Hello, $user_score_average');  
-// </script>";
+$user_score_average = isset($_COOKIE['sessionAverage']) ? $_COOKIE['sessionAverage'] : null;
+$user_score_total = isset($_COOKIE["score"]) ? $_COOKIE["score"] : null;
+
+// Set score into db
+if ($is_login)
+  addScoreIntoDatabase($user_id, $user_score_total, $user_score_average);
+
+echo "<script>
+  alert('Hello, $user_score_average');  
+</script>";
 ?>
 
 <!DOCTYPE html>
@@ -75,23 +82,35 @@ $user_score_total = isset($_COOKIE["score"]) ? $_COOKIE["score"] : 0;
       </div>
     </div>
 
-    <?php if (!$isLogin): ?>
+    <?php if (!$is_login): ?>
       <small class="text-uppercase">Insert Your Name</small>
     <?php else: ?>
       <div class="container d-flex justify-content-around w-25 text-center" style="gap: 20px;">
         <div class="stats-card">
           <h1 class="fs-4 text-uppercase">Score</h1>
-          <small><?php echo $user_score_total; ?></small>
+          <small>
+            <?php if ($user_score_total == null): ?>
+              0
+            <?php else: ?>
+              <?php echo $user_score_total; ?>
+            <?php endif; ?>
+          </small>
         </div>
         <div class="stats-card">
           <h1 class="fs-4 text-uppercase">Rates</h1>
-          <small><?php echo $user_score_average; ?>%</small>
+          <small>
+            <?php if ($user_score_average == null): ?>
+              0%
+            <?php else: ?>
+              <?php echo $user_score_average; ?>%
+            <?php endif; ?>
+          </small>
         </div>
       </div>
     <?php endif; ?>
 
-    <input type="text" placeholder="<?php echo $name ?>" class="text-center" style="background: none;" <?php if ($isLogin): ?> disabled <?php endif; ?> />
-    <a href="./play.html" class="text-uppercase fs-4">Start</a>
+    <input type="text" placeholder="<?php echo $name ?>" class="text-center" style="background: none;" <?php if ($is_login): ?> disabled <?php endif; ?> />
+    <a href="./play.html" onclick="resetValue();" class="text-uppercase fs-4">Start</a>
   </div>
 
   <!-- Toast Effect -->
@@ -127,9 +146,16 @@ $user_score_total = isset($_COOKIE["score"]) ? $_COOKIE["score"] : 0;
       toastTrigger.addEventListener("click", () => {
         toastBootstrap.show();
       });
-    }
+    }    
   </script>
   <!-- Bootstrap Script -->
+
+  <script>
+    const resetValue = () => {
+      document.cookie = `sessionAverage=0`;
+      document.cookie = `score=0`;
+    }
+  </script>
 </body>
 
 </html>

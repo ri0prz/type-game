@@ -26,15 +26,7 @@ function registrasi($tambah)
     // Tambahkan username ke database
     $query = "INSERT INTO user_data (user_id, username, password, gender_id, server_id) VALUES 
     ('', '$username', '$password', 1, 1)";
-    mysqli_query($db, $query);
-
-    // Create user valuation
-    $findId = "SELECT user_id FROM user_data WHERE username = '$username' AND password = '$password'";
-    $currentUserId = getQuery($findId);      
-    foreach ($currentUserId as $id) {
-        $query2 = "INSERT INTO valuation_user VALUES ('', 0, 0, 1, " . $id['user_id'] . ", 1, 1)";
-        mysqli_query($db, $query2);
-    }        
+    mysqli_query($db, $query);  
 
     return mysqli_affected_rows($db);
 }

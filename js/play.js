@@ -121,7 +121,7 @@ typer.oninput = (e) => {
 
       // Cookie for localStorage value transmit through php server
       document.cookie = `sessionAverage=${totalAverage}`;
-      document.cookie = `score=${localScore}`;
+      document.cookie = `score=${totalScore}`;
 
    }
 
