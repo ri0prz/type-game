@@ -1,3 +1,16 @@
+<?php
+
+// Resources
+include "./backend/config.php";
+
+// Init recent session
+session_start();
+
+// Check state
+$is_login = isset($_SESSION['login']) ? true : false;
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,9 +30,41 @@
    <!-- Scripts -->
    <script type="module" src="js/template.js" defer></script>
    <script type="module" src="js/index.js" defer></script>
+
+   <script>
+
+      // Log out function
+      const logOut = () => { 
+         window.location.href = "./backend/logout.php";         
+      }
+
+      <?php if ($is_login): ?>
+
+         // An event when page refreshed
+         if (performance.navigation.type === 1) logOut();
+
+         // An event when url undo or reloaded
+         if (performance.navigation.type === 2) logOut();
+
+      <?php endif; ?>
+
+   </script>
+   
+   <?php 
+
+      // Do auto db data store here      
+      if ($is_login) echo "
+         <script>
+            alert(". $_SESSION['user_id'] .");
+         </script>
+      ";
+
+   ?>
+
 </head>
 
 <body>
+
    <header
       class="fluid-container d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 bg-white">
       <nav class="d-flex justify-content-around align-items-center w-100 h-100 bg-white">
@@ -29,14 +74,20 @@
          <div src="images/png/icon-bar.png" alt="mobile-tab" class="mobile-effect" style="width: 30px;"></div>
          <div class="right d-flex justify-content-center align-items-center" style="gap: 14px;">
             <a href="./" class="active">Home</a>
-            <a href="./instruction.html">Instruction</a>
-            <a href="./benefit.html">Benefit</a>
-            <a href="./credits.html">Credits</a>
+            <a href="./instruction.php">Instruction</a>
+            <a href="./benefit.php">Benefit</a>
+            <a href="./credits.php">Credits</a>
+
+            <?php if (!$is_login): ?>
+               <a href="./backend/register.php">Sign Up</a>
+            <?php else: ?>
+               <a href="./backend/logout.php">Logout</a>
+            <?php endif; ?>
          </div>
       </nav>
    </header>
-   <div id="profile"
-      class="container d-flex justify-content-center align-items-center flex-column height-restore">
+
+   <div id="profile" class="container d-flex justify-content-center align-items-center flex-column height-restore">
       <div class="position-relative">
          <img id="player-character" class="rounded-circle" src="images/jpg/player-icon-4.jpg" alt="char"
             style="width: 200px; aspect-ratio: 1/1;">
@@ -44,9 +95,14 @@
             <img src="images/png/icon-change.png" alt="char-change" style="width: 2rem;" id="liveToastBtn">
          </div>
       </div>
-      <small class="text-uppercase">Insert Your Name</small>
-      <input type="text" placeholder="Unknown" class="text-center">
-      <a href="./play.html" class="text-uppercase fs-4">Start</a>
+      <?php if (!$is_login): ?>
+         <small class="text-uppercase">Insert Your Name</small>
+         <input type="text" placeholder="Unknown" class="text-center">
+      <?php else: ?>
+         <small class="text-uppercase">Welcome</small>
+         <input type="text" placeholder="<?= $_SESSION['username'] ?>" class="text-center" disabled>
+      <?php endif; ?>
+      <a href="./play.php" class="text-uppercase fs-4">Start</a>
    </div>
 
    <!-- Toast Effect -->
@@ -69,7 +125,9 @@
    <!-- Toast Effect -->
 
    <footer class="fluid-container d-flex justify-content-center align-items-center" style="height: 5rem;">
-      <small class="text-uppercase fw-light text-secondary">© Created by Group 5</small>
+      <small class="text-uppercase fw-light text-secondary">
+         <?= credit ?>
+      </small>
    </footer>
 
    <!-- Bootstrap Scripts -->
@@ -83,11 +141,14 @@
       if (toastTrigger) {
          const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
          toastTrigger.addEventListener('click', () => {
-            toastBootstrap.show()
+            toastBootstrap.show();
          })
       }
+
+      console.log(performance.navigation.type);
+
    </script>
-   <!-- Bootstrap Script -->
+   <!-- Bootstrap Scripts -->
 </body>
 
 </html>

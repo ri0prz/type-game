@@ -56,6 +56,7 @@ let isFulfilled = false;
 let isDone = false;
 let trueWord = 0;
 typer.oninput = (e) => {
+
    // Start the time after do type
    if (isStarted) {
       updateTime();

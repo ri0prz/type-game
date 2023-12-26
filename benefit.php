@@ -1,3 +1,5 @@
+<?php include "./backend/config.php"; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -102,7 +104,7 @@
    </div>
 
    <footer class="fluid-container d-flex justify-content-center align-items-center" style="height: 5rem;">
-      <small class="text-uppercase fw-light text-secondary">© Created by Group 5</small>
+      <small class="text-uppercase fw-light text-secondary"><?= credit ?></small>
    </footer>
 </body>
 
