@@ -44,9 +44,9 @@
          <div src="images/png/icon-bar.png" alt="mobile-tab" class="mobile-effect" style="width: 30px;"></div>
          <div class="right d-flex justify-content-center align-items-center" style="gap: 14px;">
             <a href="./">Home</a>
-            <a href="./instruction.html">Instruction</a>
-            <a href="./benefit.html" class="active">Benefit</a>
-            <a href="./credits.html">Credits</a>
+            <a href="./instruction.php">Instruction</a>
+            <a href="./benefit.php" class="active">Benefit</a>
+            <a href="./credits.php">Credits</a>
          </div>
       </nav>
    </header>
@@ -102,10 +102,6 @@
          </div>
       </div>      
    </div>
-
-   <footer class="fluid-container d-flex justify-content-center align-items-center" style="height: 5rem;">
-      <small class="text-uppercase fw-light text-secondary"><?= credit ?></small>
-   </footer>
 </body>
 
 </html>

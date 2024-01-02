@@ -1,7 +1,7 @@
 <?php
 
 // Resource
-include './config.php';
+require __DIR__ . "/config.php";
 
 // Db auth
 $db = connectDb();
@@ -12,7 +12,11 @@ if (isset($_POST['submit'])) {
    $username = $_POST['username'];
    $password = $_POST['password'];   
 
-   $query = "SELECT * FROM user_data WHERE username = :user AND password = :pass";
+   $query = <<< SQL
+      SELECT user_data.*, valuation_user.grade_id FROM user_data
+      JOIN valuation_user ON valuation_user.user_id = user_data.user_id
+      WHERE username = :user AND password = :pass
+   SQL;      
 
    $result = $db->prepare($query);
    $result->bindParam("user", $username);
@@ -26,7 +30,10 @@ if (isset($_POST['submit'])) {
       session_start();
       
       $_SESSION['username'] = $username;
-      $_SESSION['user_id'] = $data['user_id'];      
+      $_SESSION['user_id'] = $data['user_id']; 
+      $_SESSION['user_server'] = $data['server_id']; 
+      $_SESSION['user_gender'] = $data['gender_id']; 
+      $_SESSION['user_grade'] = $data['grade_id'];       
       $_SESSION['login'] = true;
 
       // Redirect

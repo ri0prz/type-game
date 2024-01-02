@@ -16,4 +16,5 @@ for (const charList of charLists) {
       const src = localStorage.getItem('current-character');
       charDisplay.src = src;      
    }   
+   
 }

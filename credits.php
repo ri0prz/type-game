@@ -38,9 +38,9 @@
          <div src="images/png/icon-bar.png" alt="mobile-tab" class="mobile-effect" style="width: 30px;"></div>
          <div class="right d-flex justify-content-center align-items-center" style="gap: 14px;">
             <a href="./">Home</a>
-            <a href="./instruction.html">Instruction</a>
-            <a href="./benefit.html">Benefit</a>
-            <a href="./credits.html" class="active">Credits</a>
+            <a href="./instruction.php">Instruction</a>
+            <a href="./benefit.php">Benefit</a>
+            <a href="./credits.php" class="active">Credits</a>
          </div>
       </nav>
    </header>

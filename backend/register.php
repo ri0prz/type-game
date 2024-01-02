@@ -1,7 +1,7 @@
 <?php
 
 // Resource
-require "./config.php";
+require __DIR__ . "/config.php";
 
 // Db auth
 $db = connectDb();
@@ -32,7 +32,7 @@ if (isset($_POST['submit'])) {
     }
 
     // Insert data
-    $send_query = <<<SQL
+    $send_query = <<< SQL
       INSERT INTO user_data (username, password)
       VALUES (:user, :pass);
    SQL;

@@ -29,9 +29,9 @@
          <div src="images/png/icon-bar.png" alt="mobile-tab" class="mobile-effect" style="width: 30px;"></div>
          <div class="right d-flex justify-content-center align-items-center" style="gap: 14px;">
             <a href="./">Home</a>
-            <a href="./instruction.html" class="active">Instruction</a>
-            <a href="./benefit.html">Benefit</a>
-            <a href="./credits.html">Credits</a>
+            <a href="./instruction.php" class="active">Instruction</a>
+            <a href="./benefit.php">Benefit</a>
+            <a href="./credits.php">Credits</a>
          </div>
       </nav>
    </header>
@@ -52,7 +52,7 @@
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                <div class="accordion-body">
-                  <strong>You need to click this <a href="./play.html" class="bg-primary p-1 px-2 text-white rounded">start</a> button or go into our home section.</strong> Then tap the same start button at there to play our game.
+                  <strong>You need to click this <a href="./play.php" class="bg-primary p-1 px-2 text-white rounded">start</a> button or go into our home section.</strong> Then tap the same start button at there to play our game.
                </div>
             </div>
          </div>
@@ -89,17 +89,13 @@
       </div>
    </div>
 
-   <footer class="fluid-container d-flex justify-content-center align-items-center" style="height: 5rem;">
-      <small class="text-uppercase fw-light text-secondary"><?= credit ?></small>
-   </footer>
-
    <!-- Bootstrap Scripts -->
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
       crossorigin="anonymous"></script>
    <script>
-      const collapseElementList = document.querySelectorAll('.collapse')
-      const collapseList = [...collapseElementList].map(collapseEl => new bootstrap.Collapse(collapseEl))
+      const collapseElementList = document.querySelectorAll('.collapse');
+      const collapseList = [...collapseElementList].map(collapseEl => new bootstrap.Collapse(collapseEl));
    </script>
    <!-- Bootstrap Scripts -->
 </body>

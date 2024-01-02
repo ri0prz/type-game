@@ -12,6 +12,11 @@ location = "typegame_db";
 const
 credit = "© Created by Group 4";
 
+// User login test
+function isLogin() {      
+   if (!isset($_SESSION["user_id"])) header("Location: ../");
+}
+
 // Connection
 function connectDb() {
    try {      
