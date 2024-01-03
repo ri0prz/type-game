@@ -179,9 +179,9 @@ $is_login = isset($_SESSION['login']) ? true : false;
                <div class="col px-4">
                   <small class="text-center d-inline-block w-100 text-uppercase" style="color: gray;">gender</small>
                   <select name="gender_type" class="d-inline-block w-100 py-2 mt-1 text-center">
-                     <option value="0" class="my-2">None 👥</option>
-                     <option value="1" class="my-2">Boy 🙋‍♂️</option>
-                     <option value="2" class="my-2">Girl 💁‍♀️</option>
+                     <option value="1" class="my-2">None 👥</option>
+                     <option value="2" class="my-2">Boy 🙋‍♂️</option>
+                     <option value="3" class="my-2">Girl 💁‍♀️</option>
                   </select>
                </div>
                <div class="col px-4">
