@@ -1,10 +1,6 @@
 <?php
 
-// Resource
-require __DIR__ . "/config.php";
-
-// Init recent session
-session_start();
+// Resource from: index.php
 
 // Db auth
 $db = connectDb();
@@ -24,8 +20,7 @@ $statement->bindParam("userId", $user_id);
 $statement->execute();
 
 // Identify the data for grading
-if ($data = $statement->fetch()) {
-   var_dump($data);
+if ($data = $statement->fetch()) {   
 
    // Set user value
    $user_avg = $data["rate"];
@@ -35,9 +30,7 @@ if ($data = $statement->fetch()) {
    $db->exec("UPDATE valuation_user SET valuation_score = 2009 WHERE user_id = 5");
    $grade_query = <<<SQL
       CALL gradeUpdate(:avg, :score, :userId)
-   SQL;
-
-   echo "<br><br>Success!";
+   SQL;   
 
    // Prepare grade query
    $grade_statement = $db->prepare($grade_query);
@@ -49,6 +42,7 @@ if ($data = $statement->fetch()) {
 }
 
 // Redirect
+echo "<script> alert('Goaao!') </script>";
 echo "<script> window.location.href = ../ </script>";
 
 ?>

@@ -76,6 +76,9 @@ $is_login = isset($_SESSION['login']) ? true : false;
          setcookie("score", null, time() - 3600);
       }
 
+      // Update grade
+      include "./backend/user-grade.php";
+
       echo "
          <script>
             alert(" . $user_avg . ");

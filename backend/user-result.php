@@ -1,6 +1,6 @@
 <?php
 
-// Resource for: index.php
+// Resource from: index.php
 
 // Db auth
 $db = connectDb();
