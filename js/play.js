@@ -58,6 +58,7 @@ let isFulfilled = false;
 let isDone = false;
 let trueWord = 0;
 typer.oninput = (e) => {
+   
    // Start the time after do type
    if (isStarted) {
       updateTime();
@@ -73,7 +74,9 @@ typer.oninput = (e) => {
    if (letter == currentLetter) {
       splitedLetter[typeIndex].classList.add("text-success");
       trueWord++;
-   } else splitedLetter[typeIndex].classList.add("text-warning");
+   } else {
+      splitedLetter[typeIndex].classList.add("text-warning");
+   }
 
    splitedLetter[typeIndex].classList.remove(
       "bg-body-secondary",

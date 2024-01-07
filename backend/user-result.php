@@ -5,9 +5,6 @@
 // Db auth
 $db = connectDb();
 
-// Check login state
-isLogin();
-
 function insertResultToDb($user_avg, $user_score, $grade_id, $user_id, $user_server, $user_gender)
 {
 

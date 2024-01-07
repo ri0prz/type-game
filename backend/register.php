@@ -121,9 +121,10 @@ end:
             <input type="password" name="password2" id="password2" autocomplete="off" required>
 
             <button class="btn btn-success w-100 py-2" name="submit" type="submit">Register</button>
+            <p style="word-spacing: -1px; color: darkgray;">Had account? <a href="./login.php"
+                    class="text-success fw-bold text-uppercase">click me</a></p>
+            <a href="../" class="btn w-100 py-2 btn-secondary">Back</a>
         </form>
-        <p style="word-spacing: -1px; color: darkgray;">Had account? <a href="./login.php"
-                class="text-success fw-bold text-uppercase">click me</a></p>
     </div>
 
     <!-- Bootstrap Script -->

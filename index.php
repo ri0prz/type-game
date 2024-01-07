@@ -38,16 +38,6 @@ $is_login = isset($_SESSION['login']) ? true : false;
          window.location.href = "./backend/logout.php";
       }
 
-      <?php if ($is_login): ?>
-
-         // A logout event when page refreshed
-         if (performance.navigation.type === 1) logOut();
-
-         // A logout event when url undo or reloaded
-         if (performance.navigation.type === 2) logOut();
-
-      <?php endif; ?>
-
    </script>
 
    <?php
@@ -55,12 +45,24 @@ $is_login = isset($_SESSION['login']) ? true : false;
    // Do auto db data store here      
    if ($is_login) {
 
+      // Prevention   
+      echo "
+         <script>
+            // A logout event when page refreshed
+            if (performance.navigation.type === 1) logOut();
+
+            // A logout event when url undo or reloaded
+            if (performance.navigation.type === 2) logOut();
+         </script>      
+      ";
+
       // Get user 
       $user_avg = isset($_COOKIE["sessionAverage"]) ? $_COOKIE["sessionAverage"] : null;
       $user_score = isset($_COOKIE["score"]) ? $_COOKIE["score"] : null;
 
       $grade_id = $_SESSION["user_grade"];
       $user_id = $_SESSION["user_id"];
+
       $server_id = $_SESSION["user_server"];
       $gender_id = $_SESSION["user_gender"];      
 
@@ -78,12 +80,17 @@ $is_login = isset($_SESSION['login']) ? true : false;
 
       // Update grade
       include "./backend/user-grade.php";
+      include "./backend/user-data.php";
+
+      $server_url = $_SESSION["server_url"];
+      $gender_url = $_SESSION["gender_url"];
 
       echo "
          <script>
-            alert(" . $user_avg . ");
-         </script>
+         //   alert('$gender_url $server_url');
+         </script>      
       ";
+
    }
 
    ?>
@@ -119,8 +126,11 @@ $is_login = isset($_SESSION['login']) ? true : false;
          <img id="player-character" class="rounded-circle" src="images/jpg/player-icon-4.jpg" alt="char"
             style="width: 180px; aspect-ratio: 1/1;">
          <?php if ($is_login): ?>
-            <div class="position-absolute rounded-circle shadow p-2 bg-white" style="top: 0; right: 0; cursor: pointer;">
-               <img src="images/png/gender-female.png" alt="char-change" style="width: 2rem;" class="liveToastBtn">
+            <div class="position-absolute rounded-circle shadow p-2 bg-white" style="bottom: 0; right: 0; cursor: pointer;">
+               <img src="images/png/<?= $gender_url ?>" alt="<?= $gender_url ?>" style="width: 2rem; aspect-ratio: 1/1; transform: scale(0.8);" class="liveToastBtn">
+            </div>
+            <div class="position-absolute rounded-circle shadow p-2 bg-white" style="bottom: 0; left: 0; cursor: pointer;">
+               <img src="images/png/<?= $server_url ?>" alt="<?= $server_url ?>" style="width: 2rem; aspect-ratio: 1/1;" class="liveToastBtn">
             </div>
          <?php endif; ?>
       </div>
@@ -133,32 +143,41 @@ $is_login = isset($_SESSION['login']) ? true : false;
       <?php endif; ?>
 
       <!-- User Bar -->
-      <div data-type="user-bar" class="container d-flex flex-wrap justify-content-center align-items-center gap-2">
-
-         <div class="col" style="background-color: #fca3a0;">
-            <small class="text-uppercase">scores</small>
-            <p>86<small>pts</small></p>
-         </div>
-         <div class="col" style="background-color: #a4c6f6;">
-            <small class="text-uppercase">accuracy</small>
-            <p>25<small>%</small></p>
-         </div>
-
+      <div data-type="user-bar" class="container row justify-content-center align-items-center gap-2">
          <?php if (!$is_login): ?>
-            <div class="col" style="background-color: whitesmoke;">
+            <div class="col-4 col-lg-2" style="background-color: whitesmoke;">
                <small class="text-uppercase">locked</small>
                <p>???</p>
             </div>
-            <div class="col" style="background-color: whitesmoke;">
+            <div class="col-4 col-lg-2" style="background-color: whitesmoke;">
+               <small class="text-uppercase">locked</small>
+               <p>???</p>
+            </div>
+            <div class="col-4 col-lg-2" style="background-color: whitesmoke;">
+               <small class="text-uppercase">locked</small>
+               <p>???</p>
+            </div>
+            <div class="col-4 col-lg-2" style="background-color: whitesmoke;">
                <small class="text-uppercase">locked</small>
                <p>???</p>
             </div>
          <?php else: ?>
-            <div class="col" style="background-color: #f4d304;" id="leadboardBox">
-               <small class="text-uppercase">leadboard</small>
-               <p>#7</p>
+            <div class="col-4 col-lg-2" style="background-color: #fca3a0;">
+               <small class="text-uppercase">scores</small>
+               <p>
+                  <?= $_SESSION['userScore'] ?><small>pts</small>
+               </p>
             </div>
-            <div class="col liveToastBtn" style="background-color: #04fed7;">
+            <div class="col-4 col-lg-2" style="background-color: #a4c6f6;">
+               <small class="text-uppercase">accuracy</small>
+               <p>
+                  <?= $_SESSION['userAverage'] ?><small>%</small>
+               </p>
+            </div>
+            <div class="col-4 col-lg-2" style="background-color: #f4d304;" id="leadboardBox">
+               <small class="text-uppercase">leadboard</small>               
+            </div>
+            <div class="col-4 col-lg-2 liveToastBtn" style="background-color: #04fed7;">
                <small class="text-uppercase">profile</small>
             </div>
          <?php endif; ?>
@@ -178,7 +197,7 @@ $is_login = isset($_SESSION['login']) ? true : false;
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
          </div>
          <div id="profile-data" class="py-3">
-            <form class="row default" method="post" action="./backend/user-data.php">
+            <form class="row default" method="post" action="">
                <div class="col px-4">
                   <small class="text-center d-inline-block w-100 text-uppercase" style="color: gray;">gender</small>
                   <select name="gender_type" class="d-inline-block w-100 py-2 mt-1 text-center">

@@ -12,14 +12,16 @@ BEGIN
 	CREATE TABLE IF NOT EXISTS `typegame_db`.`user_gender` (
 	  `gender_id` INT NOT NULL AUTO_INCREMENT,
 	  `gender_name` VARCHAR(45) NOT NULL DEFAULT 'Undefined',
-	  PRIMARY KEY (`gender_id`))
+	  PRIMARY KEY (`gender_id`),
+      `gender_url` VARCHAR(45) NULL)
 	ENGINE = InnoDB;
 
 	-- Table `typegame_db`.`user_server`
 	CREATE TABLE IF NOT EXISTS `typegame_db`.`user_server` (
 	  `server_id` INT NOT NULL AUTO_INCREMENT,
 	  `server_name` VARCHAR(45) NOT NULL DEFAULT 'Undefined',
-	  PRIMARY KEY (`server_id`))
+	  PRIMARY KEY (`server_id`),
+      `server_url` VARCHAR(45) NULL)
 	ENGINE = InnoDB;
 
 	-- Table `typegame_db`.`user_data`
@@ -81,17 +83,17 @@ END
 DELIMITER //
 CREATE PROCEDURE dataInsertDefault()
 BEGIN
-    INSERT INTO typegame_db.user_gender (gender_id, gender_name) VALUES
-    (NULL, 'None'),
-    (NULL, 'Male'),
-    (NULL, 'Female');
+    INSERT INTO typegame_db.user_gender (gender_id, gender_name, gender_url) VALUES
+    (NULL, 'None', 'gender-none.png'),
+    (NULL, 'Male', 'gender-male.png'),
+    (NULL, 'Female', 'gender-female.png');
 
-    INSERT INTO typegame_db.user_server (server_id, server_name) VALUES
-    (NULL, 'None'),
-    (NULL, 'Asia'),
-    (NULL, 'America'),
-    (NULL, 'Europe'),
-    (NULL, 'Africa');
+    INSERT INTO typegame_db.user_server (server_id, server_name, server_url) VALUES
+    (NULL, 'None', 'server-none.png'),
+    (NULL, 'Asia', 'server-asia.png'),
+    (NULL, 'America', 'server-america.png'),
+    (NULL, 'Europe', 'server-europe.png'),
+    (NULL, 'Africa', 'server-africa.png');
 
     INSERT INTO typegame_db.valuation_grade (grade_id, grade_name) VALUES
     (NULL, 'None'),
@@ -149,17 +151,21 @@ BEGIN
 
 	CREATE VIEW user_display AS
 	SELECT valuation_user.user_id, user_data.username, 
+    user_gender.gender_url AS gender, 
+    user_server.server_url AS server,
 	AVG(valuation_user.valuation_rate) AS rate, SUM(valuation_user.valuation_score) AS score,
 	valuation_grade.grade_name AS grade
 	FROM valuation_user 
 	JOIN user_data ON user_data.user_id = valuation_user.user_id
 	JOIN valuation_grade ON valuation_grade.grade_id = valuation_user.grade_id
+    JOIN user_gender ON user_gender.gender_id = user_data.gender_id
+    JOIN user_server ON user_server.server_id = user_data.server_id
 	GROUP BY user_id
 	ORDER BY score DESC;
 
 	-- View (2)
 	CREATE VIEW user_detail AS
-	SELECT user_data.*, valuation_user.valuation_rate, valuation_user.valuation_score
+	SELECT user_data.*, ROUND(valuation_user.valuation_rate, 2) AS valuation_rate, valuation_user.valuation_score
 	FROM user_data
 	JOIN valuation_user ON user_data.user_id = valuation_user.user_id;
     
@@ -182,9 +188,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON `typegame_db`.* TO 'typegame_user'@'loca
 
 -- Make an user
 CALL addUser("Moshi", "wolvie", 2, 3);
-CALL addUser("Woo!", "wolie", 1, 1);
-CALL addUser("pompozl", "a", 1, 1);
-CALL addUser("a", "a", 1, 1);
+CALL addUser("Woo!", "wolie", 3, 3);
+CALL addUser("pompozl", "a", 2, 4);
+CALL addUser("a", "a", 1, 2);
 
 -- Procedure of grade update
 DELIMITER //
@@ -209,17 +215,3 @@ END
 
 -- Read user data
 SELECT * FROM user_display;
-
--- SELECT user_data.*, valuation_user.grade_id FROM user_data
--- JOIN valuation_user ON valuation_user.user_id = user_data.user_id
--- WHERE username = 'a' AND password = 'a';
-
-/* 
-
-Take this below into the php:
-
-1.	get value from the view of userDisplay
-2.	set that value into gradeUpdate procedure
-
-*/
-

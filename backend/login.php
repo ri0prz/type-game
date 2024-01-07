@@ -7,16 +7,16 @@ require __DIR__ . "/config.php";
 $db = connectDb();
 
 // Check the submission value
-if (isset($_POST['submit'])) {   
+if (isset($_POST['submit'])) {
 
    $username = $_POST['username'];
-   $password = $_POST['password'];   
+   $password = $_POST['password'];
 
-   $query = <<< SQL
+   $query = <<<SQL
       SELECT user_data.*, valuation_user.grade_id FROM user_data
       JOIN valuation_user ON valuation_user.user_id = user_data.user_id
       WHERE username = :user AND password = :pass
-   SQL;      
+   SQL;
 
    $result = $db->prepare($query);
    $result->bindParam("user", $username);
@@ -28,12 +28,12 @@ if (isset($_POST['submit'])) {
 
       // Set user in session fetch
       session_start();
-      
+
       $_SESSION['username'] = $username;
-      $_SESSION['user_id'] = $data['user_id']; 
-      $_SESSION['user_server'] = $data['server_id']; 
-      $_SESSION['user_gender'] = $data['gender_id']; 
-      $_SESSION['user_grade'] = $data['grade_id'];       
+      $_SESSION['user_id'] = $data['user_id'];
+      $_SESSION['user_server'] = $data['server_id'];
+      $_SESSION['user_gender'] = $data['gender_id'];
+      $_SESSION['user_grade'] = $data['grade_id'];
       $_SESSION['login'] = true;
 
       // Redirect
@@ -104,9 +104,10 @@ if (isset($_POST['submit'])) {
          <input type="password" name="password" id="password" autocomplete="off">
 
          <button class="btn btn-primary w-100 py-2" name="submit" type="submit">Login</button>
+         <p style="word-spacing: -1px; color: darkgray;">Do register? <a href="register.php"
+               class="text-primary fw-bold text-uppercase">click me</a></p>
+         <a href="../" class="btn w-100 py-2 btn-secondary">Back</a>
       </form>
-      <p style="word-spacing: -1px; color: darkgray;">Do register? <a href="register.php"
-            class="text-primary fw-bold text-uppercase">click me</a></p>
    </div>
 
    <!-- Bootstrap Script -->

@@ -8,23 +8,22 @@ input[type='text'] {
 #profile a {
    background-color: blue;
    color: rgb(240, 248, 255);
-   padding: 4px 40px;
+   padding: 4px 40px;   
    border-radius: 10px;   
 }
 
-[data-type="user-bar"] .col {
+[data-type="user-bar"] .col-4 {
    cursor: pointer;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-   aspect-ratio: 4/3;
+   height: 60px;
+   padding: 8px;   
    border-radius: 8px;
-   padding: 40px 0;
-   height: 50px;   
-   max-width: 120px;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-direction: column;
 }
-[data-type="user-bar"] .col:hover {
+[data-type="user-bar"] .col-4:hover {
    filter: brightness(1.1);
 }
 [data-type="user-bar"] p {

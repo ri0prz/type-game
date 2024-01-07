@@ -5,9 +5,6 @@
 // Db auth
 $db = connectDb();
 
-// Check login state
-isLogin();
-
 // Init
 $user_id = $_SESSION["user_id"];
 
@@ -26,8 +23,10 @@ if ($data = $statement->fetch()) {
    $user_avg = $data["rate"];
    $user_score = $data["score"];
 
-   // Set another query
-   $db->exec("UPDATE valuation_user SET valuation_score = 2009 WHERE user_id = 5");
+   $_SESSION['userAverage'] = $user_avg;
+   $_SESSION['userScore'] = $user_score;
+
+   // Set another query   
    $grade_query = <<<SQL
       CALL gradeUpdate(:avg, :score, :userId)
    SQL;   
@@ -40,9 +39,5 @@ if ($data = $statement->fetch()) {
    $grade_statement->execute();
 
 }
-
-// Redirect
-echo "<script> alert('Goaao!') </script>";
-echo "<script> window.location.href = ../ </script>";
 
 ?>
