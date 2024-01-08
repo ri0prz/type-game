@@ -13,8 +13,9 @@ if (isset($_POST['submit'])) {
    $password = $_POST['password'];
 
    $query = <<<SQL
-      SELECT user_data.*, valuation_user.grade_id FROM user_data
+      SELECT user_data.*, valuation_user.grade_id, user_image.image_url FROM user_data
       JOIN valuation_user ON valuation_user.user_id = user_data.user_id
+      JOIN user_image ON user_image.image_id = user_data.image_id
       WHERE username = :user AND password = :pass
    SQL;
 
@@ -34,6 +35,8 @@ if (isset($_POST['submit'])) {
       $_SESSION['user_server'] = $data['server_id'];
       $_SESSION['user_gender'] = $data['gender_id'];
       $_SESSION['user_grade'] = $data['grade_id'];
+      $_SESSION['user_image'] = $data['image_id'];
+      $_SESSION['image_url'] = $data['image_url'];
       $_SESSION['login'] = true;
 
       // Redirect

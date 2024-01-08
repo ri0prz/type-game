@@ -64,7 +64,10 @@ $is_login = isset($_SESSION['login']) ? true : false;
       $user_id = $_SESSION["user_id"];
 
       $server_id = $_SESSION["user_server"];
-      $gender_id = $_SESSION["user_gender"];      
+      $gender_id = $_SESSION["user_gender"];
+      $image_id = $_SESSION["user_image"];
+
+      $image_url = $_SESSION["image_url"];
 
       // Identify value
       if ($user_avg != null && $user_score != null) {
@@ -123,18 +126,23 @@ $is_login = isset($_SESSION['login']) ? true : false;
 
    <div id="profile" class="container d-flex justify-content-center align-items-center flex-column height-restore">
       <div class="position-relative">
-         <img id="player-character" class="rounded-circle" src="images/jpg/player-icon-4.jpg" alt="char"
-            style="width: 180px; aspect-ratio: 1/1;">
          <?php if ($is_login): ?>
-            <div class="position-absolute rounded-circle shadow p-2 bg-white" style="bottom: 0; right: 0; cursor: pointer;">
-               <img src="images/png/<?= $gender_url ?>" alt="<?= $gender_url ?>" style="width: 2rem; aspect-ratio: 1/1; transform: scale(0.8);" class="liveToastBtn">
+            <img id="player-character" class="rounded-circle" src="images/jpg/<?= $image_url ?>" alt="char"
+               style="width: 180px; aspect-ratio: 1/1;">
+            <div class="position-absolute rounded-circle shadow p-2 bg-white"
+               style="bottom: 0; right: 0; cursor: pointer;">
+               <img src="images/png/<?= $gender_url ?>" alt="<?= $gender_url ?>"
+                  style="width: 2rem; aspect-ratio: 1/1; transform: scale(0.8);" class="liveToastBtn">
             </div>
             <div class="position-absolute rounded-circle shadow p-2 bg-white" style="bottom: 0; left: 0; cursor: pointer;">
-               <img src="images/png/<?= $server_url ?>" alt="<?= $server_url ?>" style="width: 2rem; aspect-ratio: 1/1;" class="liveToastBtn">
+               <img src="images/png/<?= $server_url ?>" alt="<?= $server_url ?>" style="width: 2rem; aspect-ratio: 1/1;"
+                  class="liveToastBtn">
             </div>
          <?php endif; ?>
       </div>
       <?php if (!$is_login): ?>
+         <img id="player-character" class="rounded-circle" src="images/jpg/player-icon-4.jpg" alt="char"
+            style="width: 180px; aspect-ratio: 1/1;">
          <small class="text-uppercase">Insert Your Name</small>
          <input type="text" placeholder="Unknown" class="text-center">
       <?php else: ?>
@@ -175,7 +183,7 @@ $is_login = isset($_SESSION['login']) ? true : false;
                </p>
             </div>
             <div class="col-4 col-lg-2" style="background-color: #f4d304;" id="leadboardBox">
-               <small class="text-uppercase">leadboard</small>               
+               <small class="text-uppercase">leadboard</small>
             </div>
             <div class="col-4 col-lg-2 liveToastBtn" style="background-color: #04fed7;">
                <small class="text-uppercase">profile</small>
@@ -189,48 +197,52 @@ $is_login = isset($_SESSION['login']) ? true : false;
    </div>
 
    <!-- Toast Effect -->
-   <div class="toast-container position-fixed bottom-0 end-0 p-3">
-      <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-         <div class="toast-header">
-            <strong class="me-auto">User Profile</strong>
-            <small>🎨</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-         </div>
-         <div id="profile-data" class="py-3">
-            <form class="row default" method="post" action="">
-               <div class="col px-4">
-                  <small class="text-center d-inline-block w-100 text-uppercase" style="color: gray;">gender</small>
-                  <select name="gender_type" class="d-inline-block w-100 py-2 mt-1 text-center">
-                     <option value="1" class="my-2">None 👥</option>
-                     <option value="2" class="my-2">Boy 🙋‍♂️</option>
-                     <option value="3" class="my-2">Girl 💁‍♀️</option>
-                  </select>
-               </div>
-               <div class="col px-4">
-                  <small class="text-center d-inline-block w-100 text-uppercase" style="color: gray;">server</small>
-                  <select name="server_type" class="d-inline-block w-100 py-2 mt-1 text-center">
-                     <option value="1" class="my-2">None</option>
-                     <option value="2" class="my-2">Asia</option>
-                     <option value="3" class="my-2">America</option>
-                     <option value="4" class="my-2">Europe</option>
-                     <option value="5" class="my-2">Africa</option>
-                  </select>
-               </div>
-               <div class="col-12 mt-3" style="padding: 0 80px">
-                  <input type="submit" class="w-100 py-2 bg-success text-white border-0 rounded" value="Submit">
-               </div>
-            </form>
-         </div>
-         <hr class="m-auto" style="width: 80%;">
-         <div id="character-list" class="toast-body d-flex justify-content-center align-items-start flex-wrap"
-            style="gap: 8px;">
-            <img src="images/jpg/player-icon-1.jpg" alt="avatar" class="w-25 rounded" style="cursor: pointer;">
-            <img src="images/jpg/player-icon-2.jpg" alt="avatar" class="w-25 rounded" style="cursor: pointer;">
-            <img src="images/jpg/player-icon-3.jpg" alt="avatar" class="w-25 rounded" style="cursor: pointer;">
-            <img src="images/jpg/player-icon-4.jpg" alt="avatar" class="w-25 rounded" style="cursor: pointer;">
+   <?php if ($is_login): ?>
+      <div class="toast-container position-fixed bottom-0 end-0 p-3">
+         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+               <strong class="me-auto">User Profile</strong>
+               <small>🎨</small>
+               <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div id="profile-data" class="py-3">
+               <form class="row default" method="post" action="">
+                  <div class="col px-4">
+                     <input data-role="image-setter" type="hidden" name="image_type" value="<?= $image_id ?>">
+                     <small class="text-center d-inline-block w-100 text-uppercase" style="color: gray;">gender</small>
+                     <select name="gender_type" class="d-inline-block w-100 py-2 mt-1 text-center">
+                        <?php foreach ($user_genders as $gender): ?>
+                           <option value="<?= $gender["gender_id"] ?>" class="my-2">
+                              <?= $gender["gender_name"] ?>
+                           </option>
+                        <?php endforeach ?>
+                     </select>
+                  </div>
+                  <div class="col px-4">
+                     <small class="text-center d-inline-block w-100 text-uppercase" style="color: gray;">server</small>
+                     <select name="server_type" class="d-inline-block w-100 py-2 mt-1 text-center">
+                        <?php foreach ($user_servers as $server): ?>
+                           <option value="<?= $server["server_id"] ?>" class="my-2">
+                              <?= $server["server_name"] ?>
+                           </option>
+                        <?php endforeach ?>
+                     </select>
+                  </div>
+                  <div class="col-12 mt-3" style="padding: 0 80px">
+                     <input type="submit" class="w-100 py-2 bg-success text-white border-0 rounded" value="Submit">
+                  </div>
+               </form>
+            </div>
+            <hr class="m-auto" style="width: 80%;">
+            <div id="character-list" class="toast-body d-flex justify-content-center align-items-start flex-wrap"
+               style="gap: 8px;">
+               <?php foreach ($user_images as $image): ?>
+                  <img data-id="<?= $image["image_id"] ?>" src="images/jpg/<?= $image["image_url"] ?>" alt="avatar" class="w-25 rounded user-image" style="cursor: pointer;">
+               <?php endforeach ?>
+            </div>
          </div>
       </div>
-   </div>
+   <?php endif ?>
    <!-- Toast Effect -->
 
    <!-- Bootstrap Scripts -->
@@ -252,8 +264,20 @@ $is_login = isset($_SESSION['login']) ? true : false;
             })
          }
 
+         // Leadboard redirect when clicked
          document.querySelector("#leadboardBox").onclick = () => {
             window.location.href = "./leadboard.php";
+         }
+
+         // Image setter for form necessity
+         const imageHandler = document.querySelectorAll(".user-image");
+         const targetHandler = document.querySelector("[data-role='image-setter']");
+
+         for (const imageHandle of imageHandler) {
+            imageHandle.addEventListener("click", () => {
+               const val = imageHandle.getAttribute("data-id");
+               targetHandler.setAttribute("value", val);
+            })
          }
       </script>
    <?php endif; ?>

@@ -33,7 +33,7 @@
                <div class="row container py-2" style="max-width: 800px;">
                   <div class="col d-flex align-items-center justify-content-center position-relative"
                      style="max-width: 20%;">
-                     <img id="player-character" class="rounded-circle" src="images/jpg/player-icon-4.jpg" alt="char"
+                     <img id="player-character" class="rounded-circle" src="images/jpg/<?= $result["profile"] ?>" alt="char"
                         style="width: inherit; aspect-ratio: 1/1; max-width: 120px; min-width: 70px;">
 
                      <!-- Tab + Desktop -->
