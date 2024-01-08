@@ -1,13 +1,19 @@
 <?php
 
 // Resources
-include "./backend/config.php";
+require "./backend/system.php";
+
+// Db Auth
+$auth->connectDb();
 
 // Init recent session
 session_start();
 
 // Check state
 $is_login = isset($_SESSION['login']) ? true : false;
+
+// Do auto db data store here      
+if ($is_login) $data = $auth->initUser();
 
 ?>
 
@@ -30,74 +36,6 @@ $is_login = isset($_SESSION['login']) ? true : false;
    <!-- Scripts -->
    <script type="module" src="js/template.js" defer></script>
    <script type="module" src="js/index.js" defer></script>
-
-   <script>
-
-      // Log out function
-      const logOut = () => {
-         window.location.href = "./backend/logout.php";
-      }
-
-   </script>
-
-   <?php
-
-   // Do auto db data store here      
-   if ($is_login) {
-
-      // Prevention   
-      echo "
-         <script>
-            // A logout event when page refreshed
-            if (performance.navigation.type === 1) logOut();
-
-            // A logout event when url undo or reloaded
-            if (performance.navigation.type === 2) logOut();
-         </script>      
-      ";
-
-      // Get user 
-      $user_avg = isset($_COOKIE["sessionAverage"]) ? $_COOKIE["sessionAverage"] : null;
-      $user_score = isset($_COOKIE["score"]) ? $_COOKIE["score"] : null;
-
-      $grade_id = $_SESSION["user_grade"];
-      $user_id = $_SESSION["user_id"];
-
-      $server_id = $_SESSION["user_server"];
-      $gender_id = $_SESSION["user_gender"];
-      $image_id = $_SESSION["user_image"];
-
-      $image_url = $_SESSION["image_url"];
-
-      // Identify value
-      if ($user_avg != null && $user_score != null) {
-
-         // Set last result to db
-         require "./backend/user-result.php";
-         insertResultToDb($user_avg, $user_score, $grade_id, $user_id, $server_id, $gender_id);
-
-         // Remove the recent cookie
-         setcookie("sessionAverage", null, time() - 3600);
-         setcookie("score", null, time() - 3600);
-      }
-
-      // Update grade
-      include "./backend/user-grade.php";
-      include "./backend/user-data.php";
-
-      $server_url = $_SESSION["server_url"];
-      $gender_url = $_SESSION["gender_url"];
-
-      echo "
-         <script>
-         //   alert('$gender_url $server_url');
-         </script>      
-      ";
-
-   }
-
-   ?>
-
 </head>
 
 <body>
@@ -127,15 +65,15 @@ $is_login = isset($_SESSION['login']) ? true : false;
    <div id="profile" class="container d-flex justify-content-center align-items-center flex-column height-restore">
       <div class="position-relative">
          <?php if ($is_login): ?>
-            <img id="player-character" class="rounded-circle" src="images/jpg/<?= $image_url ?>" alt="char"
+            <img id="player-character" class="rounded-circle" src="images/jpg/<?= $_SESSION["image_url"] ?>" alt="char"
                style="width: 180px; aspect-ratio: 1/1;">
             <div class="position-absolute rounded-circle shadow p-2 bg-white"
                style="bottom: 0; right: 0; cursor: pointer;">
-               <img src="images/png/<?= $gender_url ?>" alt="<?= $gender_url ?>"
+               <img src="images/png/<?= $data["gender_url"] ?>" alt="<?= $data["gender_url"] ?>"
                   style="width: 2rem; aspect-ratio: 1/1; transform: scale(0.8);" class="liveToastBtn">
             </div>
             <div class="position-absolute rounded-circle shadow p-2 bg-white" style="bottom: 0; left: 0; cursor: pointer;">
-               <img src="images/png/<?= $server_url ?>" alt="<?= $server_url ?>" style="width: 2rem; aspect-ratio: 1/1;"
+               <img src="images/png/<?= $data["server_url"] ?>" alt="<?= $data["server_url"] ?>" style="width: 2rem; aspect-ratio: 1/1;"
                   class="liveToastBtn">
             </div>
          <?php endif; ?>
@@ -208,10 +146,10 @@ $is_login = isset($_SESSION['login']) ? true : false;
             <div id="profile-data" class="py-3">
                <form class="row default" method="post" action="">
                   <div class="col px-4">
-                     <input data-role="image-setter" type="hidden" name="image_type" value="<?= $image_id ?>">
+                     <input data-role="image-setter" type="hidden" name="image_type" value="<?= $_SESSION["user_image"] ?>">
                      <small class="text-center d-inline-block w-100 text-uppercase" style="color: gray;">gender</small>
                      <select name="gender_type" class="d-inline-block w-100 py-2 mt-1 text-center">
-                        <?php foreach ($user_genders as $gender): ?>
+                        <?php foreach ($data["genders"] as $gender): ?>
                            <option value="<?= $gender["gender_id"] ?>" class="my-2">
                               <?= $gender["gender_name"] ?>
                            </option>
@@ -221,7 +159,7 @@ $is_login = isset($_SESSION['login']) ? true : false;
                   <div class="col px-4">
                      <small class="text-center d-inline-block w-100 text-uppercase" style="color: gray;">server</small>
                      <select name="server_type" class="d-inline-block w-100 py-2 mt-1 text-center">
-                        <?php foreach ($user_servers as $server): ?>
+                        <?php foreach ($data["servers"] as $server): ?>
                            <option value="<?= $server["server_id"] ?>" class="my-2">
                               <?= $server["server_name"] ?>
                            </option>
@@ -236,8 +174,9 @@ $is_login = isset($_SESSION['login']) ? true : false;
             <hr class="m-auto" style="width: 80%;">
             <div id="character-list" class="toast-body d-flex justify-content-center align-items-start flex-wrap"
                style="gap: 8px;">
-               <?php foreach ($user_images as $image): ?>
-                  <img data-id="<?= $image["image_id"] ?>" src="images/jpg/<?= $image["image_url"] ?>" alt="avatar" class="w-25 rounded user-image" style="cursor: pointer;">
+               <?php foreach ($data["images"] as $image): ?>
+                  <img data-id="<?= $image["image_id"] ?>" src="images/jpg/<?= $image["image_url"] ?>" alt="avatar"
+                     class="w-25 rounded user-image" style="cursor: pointer;">
                <?php endforeach ?>
             </div>
          </div>

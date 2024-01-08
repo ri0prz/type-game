@@ -1,10 +1,10 @@
 <?php
 
 // Resource
-require __DIR__ . "/config.php";
+require __DIR__ . "/system.php";
 
 // Db auth
-$db = connectDb();
+$auth->connectDb();
 
 // Check the form
 if (isset($_POST['submit'])) {
@@ -12,48 +12,16 @@ if (isset($_POST['submit'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $password2 = $_POST['password2'];
+    
+    $output = $auth->userRegister($username, $password, $password2);
 
     // Check username redundant
-    $check_query = "SELECT * FROM user_data WHERE username = :user";
-
-    $check_statement = $db->prepare($check_query);
-    $check_statement->bindParam("user", $username);
-    $check_statement->execute();
-
-    if ($check_statement->fetch()) {
-        $is_user_exist = true;
-        goto end;
-    }
+    if ($output == 8) $is_user_exist = true;        
 
     // Check password retype
-    if ($password2 != $password) {
-        $is_pass_diff = true;
-        goto end;
-    }
-
-    // Insert data
-    $send_query = <<< SQL
-      INSERT INTO user_data (username, password)
-      VALUES (:user, :pass);
-   SQL;
-
-    $statement = $db->prepare($send_query);
-    $statement->bindParam("user", $username);
-    $statement->bindParam("pass", $password);
-    $statement->execute();
-
-    // Redirect and start session   
-    echo "
-      <script>
-         alert('Account created!');
-         document.location.href = './login.php';
-      </script>
-   ";
-    exit();
-
+    if ($output == 9) $is_pass_diff = true;        
+    
 }
-
-end:
 
 ?>
 

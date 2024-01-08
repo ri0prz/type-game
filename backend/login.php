@@ -1,51 +1,21 @@
 <?php
 
 // Resource
-require __DIR__ . "/config.php";
+require __DIR__ . "/system.php";
 
 // Db auth
-$db = connectDb();
+$auth->connectDb();
 
 // Check the submission value
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit'])):
 
    $username = $_POST['username'];
    $password = $_POST['password'];
 
-   $query = <<<SQL
-      SELECT user_data.*, valuation_user.grade_id, user_image.image_url FROM user_data
-      JOIN valuation_user ON valuation_user.user_id = user_data.user_id
-      JOIN user_image ON user_image.image_id = user_data.image_id
-      WHERE username = :user AND password = :pass
-   SQL;
-
-   $result = $db->prepare($query);
-   $result->bindParam("user", $username);
-   $result->bindParam("pass", $password);
-   $result->execute();
-
-   // Check user validation
-   if ($data = $result->fetch()) {
-
-      // Set user in session fetch
-      session_start();
-
-      $_SESSION['username'] = $username;
-      $_SESSION['user_id'] = $data['user_id'];
-      $_SESSION['user_server'] = $data['server_id'];
-      $_SESSION['user_gender'] = $data['gender_id'];
-      $_SESSION['user_grade'] = $data['grade_id'];
-      $_SESSION['user_image'] = $data['image_id'];
-      $_SESSION['image_url'] = $data['image_url'];
-      $_SESSION['login'] = true;
-
-      // Redirect
-      header('Location: ../');
-      exit();
-   }
-
+   $auth->userLogin($username, $password);
    $error = true;
-}
+
+endif;
 
 ?>
 
