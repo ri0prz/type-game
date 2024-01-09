@@ -23,6 +23,13 @@ BEGIN
 	  PRIMARY KEY (`server_id`),
       `server_url` VARCHAR(45) NULL)
 	ENGINE = InnoDB;
+    
+    -- Table `typegame_db`.`user_image`
+    CREATE TABLE IF NOT EXISTS `typegame_db`.`user_image` (
+		`image_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        `image_url` VARCHAR(50) NOT NULL DEFAULT 'player-icon-1.jpg'
+    )
+    ENGINE = InnoDB;
 
 	-- Table `typegame_db`.`user_data`
 	CREATE TABLE IF NOT EXISTS `typegame_db`.`user_data` (
@@ -31,17 +38,24 @@ BEGIN
 	  `password` VARCHAR(45) NOT NULL,
 	  `gender_id` INT NOT NULL DEFAULT 1,
 	  `server_id` INT NOT NULL DEFAULT 1,
+      `image_id` INT NOT NULL DEFAULT 1,
 	  PRIMARY KEY (`user_id`, `gender_id`, `server_id`),
 	  INDEX `fk_user_data_user_gender_idx` (`gender_id` ASC),
 	  INDEX `fk_user_data_user_server1_idx` (`server_id` ASC),
-	  CONSTRAINT `fk_user_data_user_gender`
+      INDEX `fk_user_data_user_image1_idx` (`image_id` ASC),
+		CONSTRAINT `fk_user_data_user_gender`
 		FOREIGN KEY (`gender_id`)
 		REFERENCES `typegame_db`.`user_gender` (`gender_id`)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE,
-	  CONSTRAINT `fk_user_data_user_server1`
+		CONSTRAINT `fk_user_data_user_server1`
 		FOREIGN KEY (`server_id`)
 		REFERENCES `typegame_db`.`user_server` (`server_id`)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE,
+		CONSTRAINT `fk_user_data_user_image1`
+		FOREIGN KEY (`image_id`)
+		REFERENCES `typegame_db`.`user_image` (`image_id`)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE)
 	ENGINE = InnoDB;
@@ -87,6 +101,12 @@ BEGIN
     (NULL, 'None', 'gender-none.png'),
     (NULL, 'Male', 'gender-male.png'),
     (NULL, 'Female', 'gender-female.png');
+    
+    INSERT INTO typegame_db.user_image (image_id, image_url) VALUES
+    (NULL, 'player-icon-1.jpg'),
+    (NULL, 'player-icon-2.jpg'),
+    (NULL, 'player-icon-3.jpg'),
+    (NULL, 'player-icon-4.jpg');
 
     INSERT INTO typegame_db.user_server (server_id, server_name, server_url) VALUES
     (NULL, 'None', 'server-none.png'),
@@ -112,11 +132,12 @@ CREATE PROCEDURE addUser(
 IN uname VARCHAR(50), 
 IN upass VARCHAR(50), 
 IN genderId INT, 
-IN serverId INT)
+IN serverId INT,
+IN imageId INT)
 BEGIN
     INSERT INTO user_data 
-        (user_id, username, password, gender_id, server_id) VALUES 
-        (NULL, uname, upass, genderId, serverId);
+        (user_id, username, password, gender_id, server_id, image_id) VALUES 
+        (NULL, uname, upass, genderId, serverId, imageId);
 END 
 // DELIMITER ;
 
@@ -153,6 +174,7 @@ BEGIN
 	SELECT valuation_user.user_id, user_data.username, 
     user_gender.gender_url AS gender, 
     user_server.server_url AS server,
+    user_image.image_url AS profile,
 	AVG(valuation_user.valuation_rate) AS rate, SUM(valuation_user.valuation_score) AS score,
 	valuation_grade.grade_name AS grade
 	FROM valuation_user 
@@ -160,6 +182,7 @@ BEGIN
 	JOIN valuation_grade ON valuation_grade.grade_id = valuation_user.grade_id
     JOIN user_gender ON user_gender.gender_id = user_data.gender_id
     JOIN user_server ON user_server.server_id = user_data.server_id
+    JOIN user_image ON user_image.image_id = user_data.image_id
 	GROUP BY user_id
 	ORDER BY score DESC;
 
@@ -187,10 +210,10 @@ CREATE USER 'typegame_user'@'localhost';
 GRANT SELECT, INSERT, UPDATE, DELETE ON `typegame_db`.* TO 'typegame_user'@'localhost';
 
 -- Make an user
-CALL addUser("Moshi", "wolvie", 2, 3);
-CALL addUser("Woo!", "wolie", 3, 3);
-CALL addUser("pompozl", "a", 2, 4);
-CALL addUser("a", "a", 1, 2);
+CALL addUser("Moshi", "wolvie", 2, 3, 3);
+CALL addUser("Woo!", "wolie", 3, 3, 2);
+CALL addUser("pompozl", "a", 2, 4, 4);
+CALL addUser("a", "a", 1, 2, 1);
 
 -- Procedure of grade update
 DELIMITER //
