@@ -242,7 +242,7 @@ class Database
 
       // Change data
       $change_query = <<<SQL
-         SELECT user_gender.gender_url, user_server.server_url 
+         SELECT user_gender.*, user_server.*
          FROM user_data
          JOIN user_gender 
          ON user_gender.gender_id = user_data.gender_id
@@ -256,10 +256,12 @@ class Database
       $statement->bindParam("userId", $user_id);
       $statement->execute();
 
-      // Fetch value
+      // Fetch value to change data session
       $data = $statement->fetch();
       $_SESSION["gender_url"] = $data["gender_url"];
       $_SESSION["server_url"] = $data["server_url"];
+      $_SESSION["user_gender"] = $data["gender_id"];
+      $_SESSION["user_server"] = $data["server_id"];
 
       // Close statement
       $statement->closeCursor();
@@ -269,19 +271,13 @@ class Database
       $server_query = "SELECT * FROM user_server";
       $image_query = "SELECT * FROM user_image";
 
-      // Fetch data
+      // Exec data query
       $user_genders = $db->query($gender_query);
       $user_servers = $db->query($server_query);
       $user_images = $db->query($image_query);
 
       $server_url = $_SESSION["server_url"];
       $gender_url = $_SESSION["gender_url"];
-
-      echo "
-         <script>
-         //   alert('$gender_url $server_url');
-         </script>      
-      ";
 
       return [
          'genders' => $user_genders,
@@ -323,6 +319,22 @@ class Database
 
       // Return data
       return $this->getUserData();
+   }
+
+   public function getLeadboardData()
+   {
+      // Init
+      $db = $this->connectDb();
+
+      // Get recent session
+      session_start();
+
+      // Fetch query
+      $query = "SELECT * FROM user_display";
+
+      // Get the result
+      $top_results = $db->query($query);      
+      return $top_results;
    }
 
 }

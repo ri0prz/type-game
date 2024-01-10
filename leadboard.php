@@ -1,4 +1,15 @@
-<?php require "./backend/user-top.php"; ?>
+<?php
+
+require "./backend/system.php";
+
+// Db auth
+$auth->connectDb();
+
+// Set result
+$top_results = $auth->getLeadboardData();
+$rankValue = null;
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,8 +44,8 @@
                <div class="row container py-2" style="max-width: 800px;">
                   <div class="col d-flex align-items-center justify-content-center position-relative"
                      style="max-width: 20%;">
-                     <img id="player-character" class="rounded-circle" src="images/jpg/<?= $result["profile"] ?>" alt="char"
-                        style="width: inherit; aspect-ratio: 1/1; max-width: 120px; min-width: 70px;">
+                     <img id="player-character" class="rounded-circle" src="images/jpg/<?= $result["profile"] ?>"
+                        alt="char" style="width: inherit; aspect-ratio: 1/1; max-width: 120px; min-width: 70px;">
 
                      <!-- Tab + Desktop -->
                      <div class="position-absolute rounded-circle shadow p-2 bg-white d-none d-md-flex"
@@ -118,7 +129,9 @@
          </div>
 
          <div class="container text-center">
-            <p class="text-secondary default">You are on the <b>#<?= $rankValue ?></b> board!</p>
+            <p class="text-secondary default">You are on the <b>#
+                  <?= $rankValue ?>
+               </b> board!</p>
             <a href="./"
                class="d-block bg-success text-white text-uppercase p-2 mt-3 position-relative start-50 rounded"
                style="transform: translateX(-50%); width: 100px;">Back</a>
