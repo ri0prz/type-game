@@ -129,8 +129,7 @@ $rankValue = null;
          </div>
 
          <div class="container text-center">
-            <p class="text-secondary default">You are on the <b>#
-                  <?= $rankValue ?>
+            <p class="text-secondary default">You are on the <b>#<?= $rankValue ?>
                </b> board!</p>
             <a href="./"
                class="d-block bg-success text-white text-uppercase p-2 mt-3 position-relative start-50 rounded"

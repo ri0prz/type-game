@@ -279,10 +279,23 @@ class Database
       $server_url = $_SESSION["server_url"];
       $gender_url = $_SESSION["gender_url"];
 
+      // Get user history data
+      $history_query = "SELECT * FROM user_detail WHERE user_id = :userId ORDER BY date DESC";
+      
+      // Prepare
+      $statement = $db->prepare($history_query);
+      $statement->bindParam("userId", $user_id);
+      $statement->execute();
+
+      // Get data and close
+      $user_histories = $statement->fetchAll();
+      $statement->closeCursor();
+
       return [
          'genders' => $user_genders,
          'servers' => $user_servers,
          'images' => $user_images,
+         'histories' => $user_histories,
          'server_url' => $server_url,
          'gender_url' => $gender_url
       ];

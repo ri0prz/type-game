@@ -76,6 +76,7 @@ BEGIN
 	  `user_id` INT NOT NULL,
 	  `gender_id` INT NOT NULL,
 	  `server_id` INT NOT NULL,
+      `history_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	  PRIMARY KEY (`valuation_id`, `grade_id`, `user_id`, `gender_id`, `server_id`),
 	  INDEX `fk_valuation_user_valuation_grade1_idx` (`grade_id` ASC),
 	  INDEX `fk_valuation_user_user_data1_idx` (`user_id` ASC, `gender_id` ASC, `server_id` ASC),
@@ -175,7 +176,8 @@ BEGIN
     user_gender.gender_url AS gender, 
     user_server.server_url AS server,
     user_image.image_url AS profile,
-	AVG(valuation_user.valuation_rate) AS rate, SUM(valuation_user.valuation_score) AS score,
+	ROUND(AVG(valuation_user.valuation_rate), 2) AS rate, 
+    SUM(valuation_user.valuation_score) AS score,
 	valuation_grade.grade_name AS grade
 	FROM valuation_user 
 	JOIN user_data ON user_data.user_id = valuation_user.user_id
@@ -188,7 +190,10 @@ BEGIN
 
 	-- View (2)
 	CREATE VIEW user_detail AS
-	SELECT user_data.*, ROUND(valuation_user.valuation_rate, 2) AS valuation_rate, valuation_user.valuation_score
+	SELECT user_data.*, 
+    ROUND(valuation_user.valuation_rate, 2) AS rate, 
+    valuation_user.valuation_score AS score,
+    valuation_user.history_date AS date
 	FROM user_data
 	JOIN valuation_user ON user_data.user_id = valuation_user.user_id;
     
