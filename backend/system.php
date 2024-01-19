@@ -1,8 +1,6 @@
 <?php
-
 class Database
 {
-
    // Initialization
    private ?string
    $host = null,
@@ -14,6 +12,7 @@ class Database
    // Constructor
    public function __construct($host, $port, $user, $password, $location)
    {
+      // Set self value
       $this->host = $host;
       $this->port = $port;
       $this->user = $user;
@@ -35,12 +34,33 @@ class Database
       }
    }
 
+   // Logout operation
+   public function logOut()
+   {
+      // Init recent session
+      session_start();
 
-   // Login operation
-   public function userLogin($username, $password)
+      // Remove session state
+      session_destroy();
+
+      // Redirect
+      header("Location: ../");
+      exit();
+   }
+
+   // Read login operation
+   public function userLogin()
    {
       // Init
       $db = $this->connectDb();
+
+      // Check submission state
+      if (!isset($_POST['submit']))
+         return false;
+
+      // Fetch value
+      $username = $_POST['username'];
+      $password = $_POST['password'];
 
       // Identify
       $query = <<<SQL
@@ -54,6 +74,7 @@ class Database
          AND password = :pass
       SQL;
 
+      // Prepare
       $result = $db->prepare($query);
       $result->bindParam("user", $username);
       $result->bindParam("pass", $password);
@@ -78,65 +99,79 @@ class Database
          header('Location: ../');
          exit();
       }
-      return;
+      return true;
    }
 
-   // Register operation
-   public function userRegister($username, $password, $password2)
+   // Insert register operation
+   public function userRegister()
    {
       // Init
       $db = $this->connectDb();
 
-      // Check username redundant
-      $check_query = "SELECT * FROM user_data WHERE username = :user";
+      if (isset($_POST['submit'])) {
 
-      $check_statement = $db->prepare($check_query);
-      $check_statement->bindParam("user", $username);
-      $check_statement->execute();
+         $username = $_POST['username'];
+         $password = $_POST['password'];
+         $password2 = $_POST['password2'];
 
-      if ($check_statement->fetch()) {
-         $is_user_exist = true;
-         return 8;
+         // Check username redundant
+         $check_query = "SELECT * FROM user_data WHERE username = :user";
+
+         $check_statement = $db->prepare($check_query);
+         $check_statement->bindParam("user", $username);
+         $check_statement->execute();
+
+         if ($check_statement->fetch()) {
+            return 4;
+         }
+
+         // Check password retype
+         if ($password2 != $password) {
+            return 5;
+         }
+
+         // Insert data
+         $send_query = <<<SQL
+            INSERT INTO user_data (username, password)
+            VALUES (:user, :pass);
+         SQL;
+
+         $statement = $db->prepare($send_query);
+         $statement->bindParam("user", $username);
+         $statement->bindParam("pass", $password);
+         $statement->execute();
+
+         // Redirect and start session   
+         echo "
+            <script>
+               alert('Account created!');
+               document.location.href = './login.php';
+            </script>
+         ";
+         exit();
       }
-
-      // Check password retype
-      if ($password2 != $password) {
-         $is_pass_diff = true;
-         return 9;
-      }
-
-      // Insert data
-      $send_query = <<<SQL
-         INSERT INTO user_data (username, password)
-         VALUES (:user, :pass);
-      SQL;
-
-      $statement = $db->prepare($send_query);
-      $statement->bindParam("user", $username);
-      $statement->bindParam("pass", $password);
-      $statement->execute();
-
-      // Redirect and start session   
-      echo "
-         <script>
-            alert('Account created!');
-            document.location.href = './login.php';
-         </script>
-      ";
-      exit();
    }
 
    // Insert data operation after play
-   public function insertResultToDb($user_avg, $user_score, $grade_id, $user_id, $user_server, $user_gender)
+   public function insertResultToDb()
    {
       // Init
       $db = $this->connectDb();
 
+      // Fetch value
+      $user_avg = $_COOKIE["sessionAverage"];
+      $user_score = $_COOKIE["score"];
+      $user_repeat = $_COOKIE["repetition"];
+      $grade_id = $_SESSION["user_grade"];
+      $user_id = $_SESSION["user_id"];
+      $user_server = $_SESSION["user_server"];
+      $user_gender = $_SESSION["user_gender"];
+
       $query = <<<SQL
          INSERT INTO `valuation_user` 
-            (`valuation_id`, `valuation_rate`, `valuation_score`, `grade_id`, `user_id`, `gender_id`, `server_id`) 
+            (`valuation_id`, `valuation_rate`, `valuation_score`, `repeat`, `grade_id`, `user_id`, `gender_id`, `server_id`) 
          VALUES 
-            (NULL, :userAvg, :userScore, :gradeId, :userId, :userGender, :userServer);
+            (NULL, :userAvg, :userScore, :userRepeat, :gradeId, :userId, :userGender, :userServer);
 
          DELETE FROM `valuation_user` WHERE (valuation_rate = 0 OR valuation_score = 0)
          AND user_id = :userId;
@@ -146,6 +181,7 @@ class Database
       $statement = $db->prepare($query);
       $statement->bindParam("userAvg", $user_avg);
       $statement->bindParam("userScore", $user_score);
+      $statement->bindParam("userRepeat", $user_repeat);
       $statement->bindParam("gradeId", $grade_id);
       $statement->bindParam("userId", $user_id);
       $statement->bindParam("userGender", $user_gender);
@@ -170,7 +206,7 @@ class Database
 
    }
 
-   // User data grading
+   // Update user data for grading
    public function userGrading()
    {
       // Init
@@ -281,7 +317,7 @@ class Database
 
       // Get user history data
       $history_query = "SELECT * FROM user_detail WHERE user_id = :userId ORDER BY date DESC";
-      
+
       // Prepare
       $statement = $db->prepare($history_query);
       $statement->bindParam("userId", $user_id);
@@ -301,39 +337,25 @@ class Database
       ];
    }
 
+   // Initialization page for user
    public function initUser()
    {
-      // Prevention   
-      echo "
-         <script>
-            // Log out function
-            const logOut = () => {
-               window.location.href = './backend/logout.php';
-            }
-            
-            // A logout event when page refreshed
-            if (performance.navigation.type === 1) logOut();
+      // Check login state
+      if (!isset($_SESSION['login']))
+         return null;
 
-            // A logout event when url undo or reloaded
-            if (performance.navigation.type === 2) logOut();
-         </script>      
-      ";
-
-      // Get user 
-      $user_avg = isset($_COOKIE["sessionAverage"]) ? $_COOKIE["sessionAverage"] : null;
-      $user_score = isset($_COOKIE["score"]) ? $_COOKIE["score"] : null;
-
-      // Identify value
-      if ($user_avg != null && $user_score != null)
-         $this->insertResultToDb($user_avg, $user_score, $_SESSION["user_grade"], $_SESSION["user_id"], $_SESSION["user_server"], $_SESSION["user_gender"]);
+      // Get user value after play to identify result
+      if (isset($_COOKIE["sessionAverage"]))
+         $this->insertResultToDb();
 
       // Update grade
       $this->userGrading();
 
-      // Return data
+      // Return data      
       return $this->getUserData();
    }
 
+   // Read all data
    public function getLeadboardData()
    {
       // Init
@@ -346,13 +368,39 @@ class Database
       $query = "SELECT * FROM user_display";
 
       // Get the result
-      $top_results = $db->query($query);      
+      $top_results = $db->query($query);
       return $top_results;
+   }
+
+   // Delete user
+   public function deleteAccount()
+   {
+      // Init
+      $db = $this->connectDb();
+
+      // Start session
+      session_start();
+
+      // Fetch dataId from session
+      $user_id = $_SESSION["user_id"];
+
+      // Create delete query
+      $query = "DELETE FROM user_data WHERE user_id = :userId";
+
+      // Prepare
+      $statement = $db->prepare($query);
+      $statement->bindParam("userId", $user_id);
+      $statement->execute();
+      $statement->closeCursor();
+
+      // Remove session
+      session_destroy();
+
+      // Redirect
+      header("Location: ./logout.php");
    }
 
 }
 
 // Make db object
 $auth = new Database("localhost", "3306", "typegame_admin", "admin", "typegame_db");
-
-?>

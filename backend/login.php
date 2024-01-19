@@ -1,21 +1,10 @@
 <?php
 
-// Resource
+// Get resource
 require __DIR__ . "/system.php";
 
-// Db auth
-$auth->connectDb();
-
-// Check the submission value
-if (isset($_POST['submit'])):
-
-   $username = $_POST['username'];
-   $password = $_POST['password'];
-
-   $auth->userLogin($username, $password);
-   $error = true;
-
-endif;
+// Check the login value
+if ($auth->userLogin()) $error = true;
 
 ?>
 

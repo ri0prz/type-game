@@ -16,6 +16,21 @@
 
    <!-- Scripts -->
    <script type="module" src="js/play.js" defer></script>
+
+   <script>
+
+      // Log out function
+      const logOut = () => {
+         window.location.href = './backend/logout.php';
+      }
+
+      // A logout event when page refreshed
+      if (performance.navigation.type === 1) logOut();
+
+      // A logout event when url undo or reloaded
+      if (performance.navigation.type === 2) logOut();
+      
+   </script>
 </head>
 
 <body class="d-flex justify-content-center align-items-center flex-column">   

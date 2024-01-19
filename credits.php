@@ -1,5 +1,3 @@
-<?php include "./backend/config.php"; ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,10 +43,8 @@
       </nav>
    </header>
 
-   <div class="container d-flex justify-content-end align-items-center flex-column text-center" style="height: 16rem;">
-      <h1 class="fw-bold" style="font-size: 2rem;">t<span class="text-success">y</span>pe!</h1>
-      <p class="text-secondary w-75">This game version is <b>1.1</b> which created with these following credits:
-      </p>
+   <div class="container d-flex justify-content-end align-items-center flex-column text-center" style="height: 8rem;">
+      
    </div>
 
    <div class="container text-center">
@@ -89,7 +85,7 @@
    </div>
 
    <footer class="fluid-container d-flex justify-content-center align-items-center" style="height: 5rem;">
-      <small class="text-uppercase fw-light text-secondary"><?= credit ?></small>
+      <small class="text-uppercase fw-light text-secondary">Created by Group 11</small>
    </footer>
 </body>
 

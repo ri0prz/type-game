@@ -1,27 +1,10 @@
 <?php
 
-// Resource
+// Get resource
 require __DIR__ . "/system.php";
 
-// Db auth
-$auth->connectDb();
-
 // Check the form
-if (isset($_POST['submit'])) {
-
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $password2 = $_POST['password2'];
-    
-    $output = $auth->userRegister($username, $password, $password2);
-
-    // Check username redundant
-    if ($output == 8) $is_user_exist = true;        
-
-    // Check password retype
-    if ($output == 9) $is_pass_diff = true;        
-    
-}
+$auth->userRegister();
 
 ?>
 
@@ -109,11 +92,11 @@ if (isset($_POST['submit'])) {
     </script>
     <!-- Bootstrap Script -->
 
-    <?php if (isset($is_user_exist)): ?>
+    <?php if ($auth->userRegister() == 4): ?>
         <script>alertToast();</script>
     <?php endif; ?>
 
-    <?php if (isset($is_pass_diff)): ?>
+    <?php if ($auth->userRegister() == 5): ?>
         <script>alert("Incorrect password defined.");</script>
     <?php endif; ?>
 </body>

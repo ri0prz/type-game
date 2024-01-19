@@ -3,18 +3,9 @@
 // Resources
 require "./backend/system.php";
 
-// Db Auth
-$auth->connectDb();
-
-// Init recent session
+// Do auto db data store here
 session_start();
-
-// Check state
-$is_login = isset($_SESSION['login']) ? true : false;
-
-// Do auto db data store here      
-if ($is_login)
-   $data = $auth->initUser();
+$data = $auth->initUser();
 
 ?>
 
@@ -37,6 +28,21 @@ if ($is_login)
    <!-- Scripts -->
    <script type="module" src="js/template.js" defer></script>
    <script type="module" src="js/index.js" defer></script>
+
+   <script>
+
+      // Log out function
+      const logOut = () => {
+         window.location.href = './backend/logout.php';
+      }
+
+      // A logout event when page refreshed
+      if (performance.navigation.type === 1) logOut();
+
+      // A logout event when url undo or reloaded
+      if (performance.navigation.type === 2) logOut();
+
+   </script>
 </head>
 
 <body>
@@ -54,7 +60,7 @@ if ($is_login)
             <a href="./benefit.php">Benefit</a>
             <a href="./credits.php">Credits</a>
 
-            <?php if (!$is_login): ?>
+            <?php if (!isset($_SESSION['login'])): ?>
                <a href="./backend/register.php">Sign Up</a>
             <?php else: ?>
                <a href="./backend/logout.php">Logout</a>
@@ -65,7 +71,7 @@ if ($is_login)
 
    <div id="profile" class="container d-flex justify-content-center align-items-center flex-column height-restore">
       <div class="position-relative">
-         <?php if ($is_login): ?>
+         <?php if (isset($_SESSION['login'])): ?>
             <img id="player-character" class="rounded-circle" src="images/jpg/<?= $_SESSION["image_url"] ?>" alt="char"
                style="width: 180px; aspect-ratio: 1/1;">
             <div class="position-absolute rounded-circle shadow p-2 bg-white"
@@ -79,7 +85,7 @@ if ($is_login)
             </div>
          <?php endif; ?>
       </div>
-      <?php if (!$is_login): ?>
+      <?php if (!isset($_SESSION['login'])): ?>
          <img id="player-character" class="rounded-circle" src="images/jpg/player-icon-4.jpg" alt="char"
             style="width: 180px; aspect-ratio: 1/1;">
          <small class="text-uppercase">Insert Your Name</small>
@@ -91,7 +97,7 @@ if ($is_login)
 
       <!-- User Bar -->
       <div data-type="user-bar" class="container row justify-content-center align-items-center gap-2">
-         <?php if (!$is_login): ?>
+         <?php if (!isset($_SESSION['login'])): ?>
             <div class="col-4 col-lg-2" style="background-color: whitesmoke;">
                <small class="text-uppercase">locked</small>
                <p>???</p>
@@ -109,13 +115,16 @@ if ($is_login)
                <p>???</p>
             </div>
          <?php else: ?>
-            <div class="col-4 col-lg-2 liveToastBtn2" style="background-color: #a4c6f6;">
+            <div class="col-4 col-lg-2" id="deleteBtn" style="background-color: #ffcbd1;">
+               <small class="text-uppercase">delete</small>
+            </div>
+            <div class="col-4 col-lg-2 liveToastBtn2" style="background-color: #b0dbf1;">
                <small class="text-uppercase">history</small>
             </div>
-            <div class="col-4 col-lg-2" style="background-color: #f4d304;" id="leadboardBox">
+            <div class="col-4 col-lg-2" style="background-color: #feefc6;" id="leadboardBox">
                <small class="text-uppercase">leadboard</small>
             </div>
-            <div class="col-4 col-lg-2 liveToastBtn" style="background-color: #04fed7;">
+            <div class="col-4 col-lg-2 liveToastBtn" style="background-color: #cbf5dd;">
                <small class="text-uppercase">profile</small>
             </div>
          <?php endif; ?>
@@ -127,7 +136,7 @@ if ($is_login)
    </div>
 
    <!-- Toast Effect 1 -->
-   <?php if ($is_login): ?>
+   <?php if (isset($_SESSION['login'])): ?>
       <div class="toast-container position-fixed bottom-0 end-0 p-3">
          <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
@@ -178,7 +187,7 @@ if ($is_login)
    <!-- Toast Effect 1 -->
 
    <!-- Toast Effect 2 -->
-   <?php if ($is_login): ?>
+   <?php if (isset($_SESSION['login'])): ?>
       <div class="toast-container position-fixed bottom-0 end-0 p-3">
          <div id="liveToast2" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
@@ -228,7 +237,7 @@ if ($is_login)
                         <div class="history-box" style="background-color: #ff6; width: 100px;">
                            <small class="text-uppercase">repeat</small>
                            <p class="default">
-                              4<small>x</small>
+                              <?= $history["totalRepeat"] ?><small>x</small>
                            </p>
                         </div>
                      </div>
@@ -247,7 +256,7 @@ if ($is_login)
       integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
       crossorigin="anonymous"></script>
 
-   <?php if ($is_login): ?>
+   <?php if (isset($_SESSION['login'])): ?>
       <script>
          const toastTriggers = document.querySelectorAll('.liveToastBtn');
          const toastLive1 = document.querySelector('#liveToast');
@@ -282,6 +291,13 @@ if ($is_login)
                const val = imageHandle.getAttribute("data-id");
                targetHandler.setAttribute("value", val);
             })
+         }
+
+         // Delete db handler
+         const deleteBtn = document.querySelector('#deleteBtn');
+         deleteBtn.onclick = () => {
+            const state = confirm("Do you want to delete your account?");
+            if (state) window.location.href = "./backend/delete.php";
          }
       </script>
    <?php endif; ?>
