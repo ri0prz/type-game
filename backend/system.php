@@ -44,6 +44,7 @@ class Database
       session_destroy();
 
       // Redirect
+      $this->isLogin = false;
       header("Location: ../");
       exit();
    }
@@ -95,7 +96,7 @@ class Database
          $_SESSION['image_url'] = $data['image_url'];
          $_SESSION['login'] = true;
 
-         // Redirect
+         // Redirect         
          header('Location: ../');
          exit();
       }
@@ -400,6 +401,14 @@ class Database
       header("Location: ./logout.php");
    }
 
+   // Navbar template   
+   public function userNavbar() {
+      if (isset($_SESSION["login"])) {
+         include "template/navbar-login.php";
+         return;
+      }
+      include "template/navbar-not-login.php";
+   }
 }
 
 // Make db object

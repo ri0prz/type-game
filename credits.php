@@ -1,3 +1,7 @@
+<?php 
+require "./backend/system.php";
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,32 +24,16 @@
    <!-- Style -->
    <style>
       img {
-         height: 80px;  
-         object-fit: contain;       
+         height: 80px;
+         object-fit: contain;
       }
    </style>
 </head>
 
 <body>
-   <header
-      class="fluid-container d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 bg-white">
-      <nav class="d-flex justify-content-around align-items-center w-100 h-100 bg-white">
-         <div class="left">
-            <h1 class="fw-bold" style="font-size: 2rem;">t<span class="text-success">y</span>pe!</h1>
-         </div>
-         <div src="images/png/icon-bar.png" alt="mobile-tab" class="mobile-effect" style="width: 30px;"></div>
-         <div class="right d-flex justify-content-center align-items-center" style="gap: 14px;">
-            <a href="./">Home</a>
-            <a href="./instruction.php">Instruction</a>
-            <a href="./benefit.php">Benefit</a>
-            <a href="./credits.php" class="active">Credits</a>
-         </div>
-      </nav>
-   </header>
+   <?php $auth->userNavbar() ?>
 
-   <div class="container d-flex justify-content-end align-items-center flex-column text-center" style="height: 8rem;">
-      
-   </div>
+   <div class="container d-flex justify-content-end align-items-center flex-column text-center" style="height: 8rem;"></div>
 
    <div class="container text-center">
       <div class="row">
@@ -61,7 +49,7 @@
                   <p>Fariz</p>
                </div>
             </div>
-         </div>   
+         </div>
       </div>
       <div class="row m-3">
          <div class="col">
@@ -70,17 +58,17 @@
                <div class="col-lg-2 col-md-3 col d-flex flex-column justify-content-center align-items-center">
                   <img src="images/png/credit-freepik.png" alt="image">
                   <p class="m-2 f-poppins">Freepik</p>
-               </div>          
+               </div>
                <div class="col-lg-2 col-md-3 col d-flex flex-column justify-content-center align-items-center">
                   <img src="images/png/credit-gfonts.png" alt="image">
                   <p class="m-2 f-poppins">GFonts</p>
-               </div>          
+               </div>
                <div class="col-lg-2 col-md-3 col d-flex flex-column justify-content-center align-items-center">
                   <img src="images/png/credit-bootstrap.png" alt="image">
                   <p class="m-2 f-poppins">Bootstrap</p>
-               </div>                                        
+               </div>
             </div>
-         </div>   
+         </div>
       </div>
    </div>
 

@@ -1,3 +1,7 @@
+<?php 
+require "./backend/system.php";
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,28 +15,14 @@
    <!-- Bootstrap + CSS -->
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-   <link rel="stylesheet" href="css/style.css">   
+   <link rel="stylesheet" href="css/style.css">
 
    <!-- Scripts -->
    <script type="module" src="js/template.js" defer></script>
 </head>
 
 <body>
-   <header
-      class="fluid-container d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 bg-white">
-      <nav class="d-flex justify-content-around align-items-center w-100 h-100 bg-white">
-         <div class="left">
-            <h1 class="fw-bold" style="font-size: 2rem;">t<span class="text-success">y</span>pe!</h1>
-         </div>
-         <div src="images/png/icon-bar.png" alt="mobile-tab" class="mobile-effect" style="width: 30px;"></div>
-         <div class="right d-flex justify-content-center align-items-center" style="gap: 14px;">
-            <a href="./">Home</a>
-            <a href="./instruction.php" class="active">Instruction</a>
-            <a href="./benefit.php">Benefit</a>
-            <a href="./credits.php">Credits</a>
-         </div>
-      </nav>
-   </header>
+   <?php $auth->userNavbar() ?>
    <div class="container height-restore d-flex justify-content-center align-items-center flex-column">
       <div class="container text-center">
          <h1 class="fw-bold" style="font-size: 2rem;">t<span class="text-success">y</span>pe!</h1>
@@ -50,7 +40,9 @@
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                <div class="accordion-body">
-                  <strong>You need to click this <a href="./play.php" class="bg-primary p-1 px-2 text-white rounded">start</a> button or go into our home section.</strong> Then tap the same start button at there to play our game.
+                  <strong>You need to click this <a href="./play.php"
+                        class="bg-primary p-1 px-2 text-white rounded">start</a> button or go into our home
+                     section.</strong> Then tap the same start button at there to play our game.
                </div>
             </div>
          </div>
@@ -64,7 +56,8 @@
             </h2>
             <div id="collapseTwo" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                <div class="accordion-body">
-                  <strong>The system will provide you a sentence.</strong> Your objective is re-type the sentence from each letter correctly.
+                  <strong>The system will provide you a sentence.</strong> Your objective is re-type the sentence from
+                  each letter correctly.
                </div>
             </div>
          </div>
@@ -78,7 +71,8 @@
             </h2>
             <div id="collapseThree" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                <div class="accordion-body">
-                  <strong>Those are the rules.</strong> The rest just let you play as long as you want, keep your own type valuation on high percentage! 😉
+                  <strong>Those are the rules.</strong> The rest just let you play as long as you want, keep your own
+                  type valuation on high percentage! 😉
                </div>
             </div>
          </div>
