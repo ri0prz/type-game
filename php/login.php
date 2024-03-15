@@ -2,10 +2,14 @@
 session_start();
 require 'function.php';
 
+// cek apakah button sudah di klik atau belum
+if (isset($_POST['submit'])){
+
 // Cek apakah button sudah di klik atau belum
 if (isset($_POST['submit'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
+
     $result = mysqli_query($db, "SELECT * FROM user_data WHERE username = '$username'");
 
     // Cek username
@@ -25,13 +29,13 @@ if (isset($_POST['submit'])) {
             exit();
         }
     }
-    $error = true;
+}
+$error = true;
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,7 +65,16 @@ if (isset($_POST['submit'])) {
             margin-bottom: 20px;
         }
     </style>
+
 </head>
+<body>
+<?php if(isset($error)) : ?>
+<p style="color='red'">password/username salah bro</p>
+    <?php endif; ?>
+    <div class="container">
+        <form action="" method="post" class="form">
+            <label for="username">Username : </label>
+            <input type="text" name="username" id="username" placeholder="Username" autocomplete="none"><br>
 
 <body class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
     <div class="toast-container position-fixed bottom-0 end-0 p-4">
@@ -86,29 +99,9 @@ if (isset($_POST['submit'])) {
             <label for="password">Password.</label>
             <input type="password" name="password" id="password" autocomplete="off">
 
-            <button class="btn btn-primary w-100 py-2" name="submit" type="submit">Login</button>
+        <button type="submit" name="submit" class="button">Login!!!</button>
         </form>
-        <p style="word-spacing: -1px; color: darkgray;">Do register? <a href="register.php"
-                class="text-primary fw-bold text-uppercase">click me</a></p>
+        <p class="text">belum punya akun?Daftar <a href="register.php">Disini</a>.</p>
     </div>
-
-    <!-- Bootstrap Script -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
-    <script>
-        const toastTrigger = document.getElementById('liveToastBtn')
-        const toastLiveExample = document.getElementById('liveToast')
-        const alertToast = () => {
-            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
-            toastBootstrap.show();
-        }        
-    </script>
-    <!-- Bootstrap Script -->
-
-    <?php if (isset($error)): ?>
-        <script>alertToast();</script>
-    <?php endif; ?>
 </body>
-
 </html>
