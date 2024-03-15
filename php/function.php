@@ -1,64 +1,68 @@
 <?php
 
 // Koneksi ke database
-$db = mysqli_connect("localhost", "root", "", "typegame");
+$db = mysqli_connect("localhost", "root", "", "typegame_db");
 
-// Baca isi yang ada didatabase
-function addQuery($query)
+// Retrieve data from database
+function getQuery($query)
 {
     global $db;
     $result = mysqli_query($db, $query);
     $rows = [];
-    while ($row = mysqli_fetch_assoc($result)) {
+    while ($row = mysqli_fetch_assoc($result))
         $rows[] = $row;
-    }
     return $rows;
 }
 
+// Read data from db
 function readQuery($query)
 {
     global $db;
-    $result = mysqli_query($db, $query);    
+    $result = mysqli_query($db, $query);
     if ($result) return true;
     else return false;
 }
 
-// Registrasi
-function registrasi($tambah)
+// Retrieve user data from database
+function getUser($username, $password)
 {
     global $db;
-    $username = strtolower(stripslashes($tambah['username'])); // ✨ stripslashes membersihkan dari karakter2 aneh
-    $password = $tambah['password'];
-    $password2 = $tambah['password2'];
+    $findId = "SELECT * FROM user_data WHERE username = '$username' AND password = '$password'";
+    $currentUserId = getQuery($findId);
+    $userId = null;
+    foreach ($currentUserId as $id)
+        $userId = $id;
+    return $userId;
+}
 
-    // Cek username ada belum 
-    $result = mysqli_query($db, "SELECT username FROM user WHERE username = '$username'");
+// Retrieve user data from database by id
+function getUserById($user_id)
+{
+    global $db;
+    $query = "SELECT * FROM user_data WHERE user_id = $user_id";
+    $currentUserId = getQuery($query);
+    $userId = null;
+    foreach ($currentUserId as $id)
+        $userId = $id;
+    return $userId;
+}
 
-    if (mysqli_fetch_assoc($result)) {
-        echo "<script>
-        alert('Username already taken.')
-        </script>";
-        return false;
-    }
+// Insert user game score into db
+function addScoreIntoDatabase($user_id, $user_score_total, $user_score_average)
+{
+    global $db;
 
-    // Cek konfirmasi password
-    if ($password !== $password2) {
-        echo "<script>
-        alert('Incorrect password.')
-        </script>";
-        return false;
-    }
+    $initial = getUserById($user_id);
+    $user_gender = $initial['gender_id'];
+    $user_server = $initial['server_id'];
 
-    // Tambahkan username ke database
-    $query = "INSERT INTO user (id, username, password, gender_id, server_id) VALUES (
-    '',
-    '$username',
-    '$password',
-    1,
-    1
-    )";
+    $query = "INSERT INTO `valuation_user` 
+    (`valuation_id`, `valuation_rate`, `valuation_score`, `grade_id`, `user_data_user_id`, `gender_id`, `server_id`) VALUES 
+    (NULL, '$user_score_average', '$user_score_total', '1', '$user_id', '$user_gender', '$user_server')";
     mysqli_query($db, $query);
 
-    return mysqli_affected_rows($db);
+    $_COOKIE['sessionAverage'] = 0;
+    $_COOKIE['score'] = 0;
+    return;
 }
 ?>

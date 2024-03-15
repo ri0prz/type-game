@@ -1,8 +1,38 @@
 <?php
 require "function.php";
 
-// cek apakah button di klik atau tidak 
-if (isset($_POST['submit'])) {    
+// Registrasi
+function registrasi($tambah)
+{
+    global $db;
+    $username = strtolower(stripslashes($tambah['username'])); // ✨ stripslashes membersihkan dari karakter2 aneh
+    $password = $tambah['password'];
+    $password2 = $tambah['password2'];
+
+    // Cek username ada belum 
+    $result = mysqli_query($db, "SELECT username FROM user_data WHERE username = '$username'");
+
+    if (mysqli_fetch_assoc($result)) {
+        echo "<script> alert('Username already taken.') </script>";
+        return false;
+    }
+
+    // Cek konfirmasi password
+    if ($password !== $password2) {
+        echo "<script> alert('Incorrect password.') </script>";
+        return false;
+    }
+
+    // Tambahkan username ke database
+    $query = "INSERT INTO user_data (user_id, username, password, gender_id, server_id) VALUES 
+    ('', '$username', '$password', 1, 1)";
+    mysqli_query($db, $query);  
+
+    return mysqli_affected_rows($db);
+}
+
+// Cek apakah button di klik atau tidak 
+if (isset($_POST['submit'])) {
     if (registrasi($_POST) > 0) {
         echo "<script>
         alert('Account created!');
@@ -15,7 +45,6 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -42,11 +71,11 @@ if (isset($_POST['submit'])) {
             border-bottom: 2px solid black;
             outline: none;
             padding: 8px 4px;
-            margin-bottom: 8px;
+            margin-bottom: 28px;
         }
 
         button[type="submit"] {
-            margin: 20px 0;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -69,10 +98,10 @@ if (isset($_POST['submit'])) {
         <h1 class="fw-bold mb-4" style="font-size: 2rem;">t<span class="text-success">y</span>pe!</h1>
         <form action="" method="post" class="d-flex flex-column justify-content-center align-items-center">
             <label for="username">Username.</label>
-            <input type="text" name="username" id="username" autocomplete="off" required><br>
+            <input type="text" name="username" id="username" autocomplete="off" required>
 
             <label for="password">Password.</label>
-            <input type="password" name="password" id="password" autocomplete="off" required><br>
+            <input type="password" name="password" id="password" autocomplete="off" required>
 
             <label for="password">Re-type Password.</label>
             <input type="password" name="password2" id="password2" autocomplete="off" required>

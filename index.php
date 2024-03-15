@@ -1,4 +1,5 @@
 <?php
+require 'php/function.php';
 
 // Determine user auth state
 $login_state = false;
@@ -6,11 +7,21 @@ session_start();
 if (isset($_SESSION['login']))
   $login_state = true;
 
-$name = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
-echo "<script>
-  alert('Hello, $name');  
-  </script>";
+$is_login = isset($_SESSION['username']);
+$name = $is_login ? $_SESSION['username'] : 'Guest';
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'Undefined';
 
+// Retrieve localData (.js) to server (.php)
+$user_score_average = isset($_COOKIE['sessionAverage']) ? $_COOKIE['sessionAverage'] : null;
+$user_score_total = isset($_COOKIE["score"]) ? $_COOKIE["score"] : null;
+
+// Set score into db
+if ($is_login)
+  addScoreIntoDatabase($user_id, $user_score_total, $user_score_average);
+
+echo "<script>
+  alert('Hello, $user_score_average');  
+</script>";
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +43,7 @@ echo "<script>
   <!-- Scripts -->
   <script type="module" src="js/template.js" defer></script>
   <script type="module" src="js/index.js" defer></script>
+
 </head>
 
 <body>
@@ -60,6 +72,7 @@ echo "<script>
       </div>
     </nav>
   </header>
+
   <div id="profile" class="container d-flex justify-content-center align-items-center flex-column height-restore">
     <div class="position-relative">
       <img id="player-character" class="rounded-circle" src="images/jpg/player-icon-4.jpg" alt="char"
@@ -68,9 +81,36 @@ echo "<script>
         <img src="images/png/icon-change.png" alt="char-change" style="width: 2rem" id="liveToastBtn" />
       </div>
     </div>
-    <small class="text-uppercase">Insert Your Name</small>
-    <input type="text" placeholder="Unknown" class="text-center" />
-    <a href="./play.html" class="text-uppercase fs-4">Start</a>
+
+    <?php if (!$is_login): ?>
+      <small class="text-uppercase">Insert Your Name</small>
+    <?php else: ?>
+      <div class="container d-flex justify-content-around w-25 text-center" style="gap: 20px;">
+        <div class="stats-card">
+          <h1 class="fs-4 text-uppercase">Score</h1>
+          <small>
+            <?php if ($user_score_total == null): ?>
+              0
+            <?php else: ?>
+              <?php echo $user_score_total; ?>
+            <?php endif; ?>
+          </small>
+        </div>
+        <div class="stats-card">
+          <h1 class="fs-4 text-uppercase">Rates</h1>
+          <small>
+            <?php if ($user_score_average == null): ?>
+              0%
+            <?php else: ?>
+              <?php echo $user_score_average; ?>%
+            <?php endif; ?>
+          </small>
+        </div>
+      </div>
+    <?php endif; ?>
+
+    <input type="text" placeholder="<?php echo $name ?>" class="text-center" style="background: none;" <?php if ($is_login): ?> disabled <?php endif; ?> />
+    <a href="./play.html" onclick="resetValue();" class="text-uppercase fs-4">Start</a>
   </div>
 
   <!-- Toast Effect -->
@@ -92,10 +132,6 @@ echo "<script>
   </div>
   <!-- Toast Effect -->
 
-  <footer class="fluid-container d-flex justify-content-center align-items-center" style="height: 5rem">
-    <small class="text-uppercase fw-light text-secondary">© Created by Group 5</small>
-  </footer>
-
   <!-- Bootstrap Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
@@ -110,9 +146,16 @@ echo "<script>
       toastTrigger.addEventListener("click", () => {
         toastBootstrap.show();
       });
-    }
+    }    
   </script>
   <!-- Bootstrap Script -->
+
+  <script>
+    const resetValue = () => {
+      document.cookie = `sessionAverage=0`;
+      document.cookie = `score=0`;
+    }
+  </script>
 </body>
 
 </html>
